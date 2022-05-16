@@ -11,7 +11,9 @@ import java.math.BigInteger;
 public class Customer {
     @Id
     private Long id;
+    private BigInteger customerID;
     private String firstName;
     private String lastName;
-    private BigInteger customerID;
+    private Address address;
+    private Contact contact;
 }
