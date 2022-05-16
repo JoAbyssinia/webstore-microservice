@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 public class Product {
     @Id
-    private int id;
+    private Long id;
     private int productNumber;
     private String name;
     private String description;
