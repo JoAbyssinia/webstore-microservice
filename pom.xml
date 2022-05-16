@@ -19,6 +19,7 @@
 	</properties>
 	<modules>
 		<module>product-service</module>
+		<module>customer-service</module>
 	</modules>
 
 </project>
