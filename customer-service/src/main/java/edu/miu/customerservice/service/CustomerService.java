@@ -9,4 +9,6 @@ public interface CustomerService {
     CustomerResponseDTO addCustomer(CustomerRequestDTO customerDTO);
 
     CustomerResponseDTO deleteCustomer(String customerID);
+
+    CustomerResponseDTO getCustomerByCustomerID(String customerID);
 }

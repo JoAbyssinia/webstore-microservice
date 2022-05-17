@@ -50,4 +50,5 @@ public class CustomerUtils {
         // this will convert any number sequence into 6 character.
         return String.format("%06d", number);
     }
+
 }
