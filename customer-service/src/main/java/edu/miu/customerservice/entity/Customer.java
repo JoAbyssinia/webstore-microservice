@@ -11,7 +11,23 @@ import java.math.BigInteger;
 public class Customer {
     @Id
     private Long id;
+    private String customerID;
     private String firstName;
     private String lastName;
-    private BigInteger customerID;
+    private Address address;
+    private Contact contact;
+
+    public Customer(Long id,
+                    String customerID,
+                    String firstName,
+                    String lastName,
+                    Address address,
+                    Contact contact) {
+        this.id = id;
+        this.customerID = customerID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.contact = contact;
+    }
 }

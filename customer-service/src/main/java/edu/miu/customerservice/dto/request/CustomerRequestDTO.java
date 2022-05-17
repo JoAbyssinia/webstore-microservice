@@ -14,5 +14,5 @@ public class CustomerRequestDTO implements Serializable {
     private String email;
     private String city;
     private String street;
-    private String zip;
+    private Integer zip;
 }

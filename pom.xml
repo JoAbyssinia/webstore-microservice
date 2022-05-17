@@ -20,6 +20,8 @@
 	<modules>
 		<module>product-service</module>
 		<module>customer-service</module>
+		<module>webshop-registry</module>
+		<module>webshop-registry-replica-one</module>
 	</modules>
 
 </project>
