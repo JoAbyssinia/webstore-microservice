@@ -25,6 +25,7 @@
 		<module>config-service</module>
 		<module>stock-service</module>
 		<module>webshop-gateway</module>
+		<module>shoppingcart-command</module>
 	</modules>
 
 </project>
