@@ -1,6 +1,0 @@
-server:
-  port: 8090
-
-logging:
-  file:
-    name: /Users/bijayshrestha/elk-logs/customer-service
