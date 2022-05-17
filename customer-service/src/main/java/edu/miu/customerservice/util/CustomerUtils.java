@@ -28,7 +28,17 @@ public class CustomerUtils {
         return customer;
     }
     public static CustomerResponseDTO parseCustomerToCustomerResponseDTO(Customer customer){
-        return null;
+        //TODO: REMOVE THIS AFTER TESTING
+        CustomerResponseDTO customerResponseDTO = CustomerResponseDTO.builder()
+                .firstName(customer.getFirstName())
+                .lastName(customer.getLastName())
+                .phone(customer.getContact().getPhone())
+                .email(customer.getContact().getEmail())
+                .street(customer.getAddress().getStreet())
+                .city(customer.getAddress().getCity())
+                .zip(customer.getAddress().getZip())
+                .build();
+        return customerResponseDTO;
     }
 
     public static String generateCustomerUniqueID(){
