@@ -1,4 +1,11 @@
 server:
   port: 8091
 
+spring:
+  application:
+    name: product-service
+  cloud:
+    config:
+      url: http://localhost:9999
+
 
