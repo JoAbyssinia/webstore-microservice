@@ -68,6 +68,21 @@ public class CustomerController {
                 HttpStatus.OK);
     }
 
+    @PutMapping("/{customerID}")
+    public ResponseEntity<?> updateCustomer(@PathVariable String customerID,
+                                            @RequestBody CustomerRequestDTO customerRequestDTO){
+        Optional<CustomerResponseDTO> customerResponseDTOList =
+                Optional.ofNullable(customerService.updateCustomer(customerID, customerRequestDTO));
+        if(customerResponseDTOList.isEmpty()){
+            return new ResponseEntity<>(
+                    getGenericCustomerError("Customer with ID : " + customerID + " Not Found"),
+                    HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(
+                customerResponseDTOList.get(),
+                HttpStatus.OK);
+    }
+
     public GenericCustomerError getGenericCustomerError(String message){
         return new GenericCustomerError(message);
     }

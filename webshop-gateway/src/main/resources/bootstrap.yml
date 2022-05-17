@@ -18,10 +18,10 @@ spring:
         - id: product-service
           uri: lb://product-service
           predicates:
-            - path=/api/v1/product/**
+            - Path=/api/v1/product/**
         - id: stock-service
           uri: lb://stock-service
           predicates:
-            - path=//api/v1/stock/**
+            - Path=//api/v1/stock/**
 
 

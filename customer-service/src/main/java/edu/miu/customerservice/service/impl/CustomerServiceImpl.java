@@ -53,5 +53,23 @@ public class CustomerServiceImpl implements CustomerService {
 
     }
 
+    @Override
+    public CustomerResponseDTO updateCustomer(String customerID, CustomerRequestDTO customerRequestDTO) {
+        Optional<Customer> isCustomerExist = customerRepository.findByCustomerID(customerID);
+        if (isCustomerExist.isEmpty()) {
+            return null;
+        }
+        Customer customer = isCustomerExist.get();
+        customer.setFirstName(customerRequestDTO.getFirstName());
+        customer.setLastName(customerRequestDTO.getLastName());
+        customer.getContact().setEmail(customerRequestDTO.getEmail());
+        customer.getContact().setPhone(customerRequestDTO.getPhone());
+        customer.getAddress().setStreet(customerRequestDTO.getStreet());
+        customer.getAddress().setCity(customerRequestDTO.getCity());
+        customer.getAddress().setZip(customerRequestDTO.getZip());
+        customerRepository.save(customer);
+        return CustomerUtils.parseCustomerToCustomerResponseDTO(customer);
+    }
+
 
 }

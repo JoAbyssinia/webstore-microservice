@@ -32,6 +32,7 @@ public class CustomerUtils {
     public static CustomerResponseDTO parseCustomerToCustomerResponseDTO(Customer customer){
         //TODO: REMOVE THIS AFTER TESTING
         CustomerResponseDTO customerResponseDTO = CustomerResponseDTO.builder()
+                .customerID(customer.getCustomerID())
                 .firstName(customer.getFirstName())
                 .lastName(customer.getLastName())
                 .phone(customer.getContact().getPhone())

@@ -5,9 +5,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigInteger;
+
 @Builder
 @Getter
 public class CustomerResponseDTO {
+    private String customerID;
     private String firstName;
     private String lastName;
     private String phone;
