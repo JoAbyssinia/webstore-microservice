@@ -32,7 +32,7 @@ public class StockController {
             return new ResponseEntity<>(stockResponseDTO, HttpStatus.OK);
         }
         return new ResponseEntity<>("Can't find Stock with the product number: " + productNumber,
-                HttpStatus.NO_CONTENT);
+                HttpStatus.NOT_FOUND);
     }
 
     @GetMapping
@@ -54,7 +54,8 @@ public class StockController {
         if (stockResponseDTO != null) {
             return new ResponseEntity<>(stockResponseDTO, HttpStatus.OK);
         }
-        return new ResponseEntity<>("Stock with this product number " + productNumber + " couldn't find", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("Stock with this product number " + productNumber + " couldn't find",
+                HttpStatus.NOT_FOUND);
 
     }
 

@@ -22,7 +22,7 @@ public class ProductController {
     @PostMapping
     ResponseEntity<?> addProduct(@RequestBody ProductRequestDTO productRequestDTO) {
         ProductResponseDTO productResponseDTO = productService.addProduct(productRequestDTO);
-        return new ResponseEntity<ProductResponseDTO>(productResponseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping
@@ -37,7 +37,7 @@ public class ProductController {
             return new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
         }
         return new ResponseEntity<>("Can't find product with the product number: " + productNumber,
-                HttpStatus.NO_CONTENT);
+                HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{productNumber}")
@@ -55,7 +55,8 @@ public class ProductController {
             return new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>("product with this product number " + productNumber + " couldn't find", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("product with this product number " + productNumber + " couldn't find",
+                HttpStatus.NOT_FOUND);
 
     }
 

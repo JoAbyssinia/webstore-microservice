@@ -61,9 +61,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDTO deleteProduct(String productNumber) {
         Optional<Product> isProductExist = productRepository.findByProductNumber(productNumber);
-        isProductExist.ifPresent(productRepository::delete);
-        stockInterface.deleteStock(productNumber);
-        return ProductUtils.parseProductTOProductResponseDTO(isProductExist.get());
+
+//        isProductExist.ifPresent(productRepository::delete).;
+
+        if (isProductExist.isPresent()){
+            Product product = isProductExist.get();
+            productRepository.delete(product);
+            stockInterface.deleteStock(productNumber);
+            return ProductUtils.parseProductTOProductResponseDTO(isProductExist.get());
+        }
+        return null;
+
     }
 
     @Override
