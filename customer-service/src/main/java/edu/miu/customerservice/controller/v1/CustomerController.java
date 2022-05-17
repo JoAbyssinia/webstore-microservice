@@ -5,10 +5,7 @@ import edu.miu.customerservice.dto.response.CustomerResponseDTO;
 import edu.miu.customerservice.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/customers")
@@ -25,5 +22,16 @@ public class CustomerController {
         return new ResponseEntity<CustomerResponseDTO>(
                 customerService.addCustomer(customerRequestDTO),
                 HttpStatus.CREATED);
+    }
+    @DeleteMapping("/{customerID}")
+    public ResponseEntity<?> deleteCustomer(@PathVariable String customerID){
+        CustomerResponseDTO customerResponseDTO = customerService.deleteCustomer(customerID);
+        if(customerResponseDTO != null){
+            return new ResponseEntity<CustomerResponseDTO>(
+                    customerResponseDTO,
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Customer with ID : " + customerID + " Not Found",
+                HttpStatus.NOT_FOUND);
     }
 }
