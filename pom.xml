@@ -22,6 +22,7 @@
 		<module>customer-service</module>
 		<module>webshop-registry</module>
 		<module>webshop-registry-replica-one</module>
+		<module>config-service</module>
 	</modules>
 
 </project>

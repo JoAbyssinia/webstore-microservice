@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: Product-service
+  cloud:
+    config:
+      url: http://localhost:9999
