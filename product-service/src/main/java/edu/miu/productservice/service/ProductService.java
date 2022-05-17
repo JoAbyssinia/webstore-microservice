@@ -1,18 +1,22 @@
 package edu.miu.productservice.service;
 
 
-import edu.miu.productservice.dto.ProductDto;
-import edu.miu.productservice.entity.Product;
+import edu.miu.productservice.dto.request.ProductRequestDTO;
+import edu.miu.productservice.dto.response.ProductResponseDTO;
 
 import java.util.List;
 
 public interface ProductService {
 
-     ProductDto addProduct(ProductDto productDto);
-     ProductDto updateProduct(Integer productNumber, ProductDto productDto);
-     void deleteProduct(Integer productNumber);
-     List<ProductDto> getAllProduct();
-     ProductDto getProduct(Integer productNumber);
+    ProductResponseDTO addProduct(ProductRequestDTO productRequestDto);
+
+    ProductResponseDTO updateProduct(String productNumber, ProductRequestDTO productRequestDto);
+
+    ProductResponseDTO deleteProduct(String productNumber);
+
+    List<ProductResponseDTO> getAllProduct();
+
+    ProductResponseDTO getProduct(String productNumber);
 
 
 }

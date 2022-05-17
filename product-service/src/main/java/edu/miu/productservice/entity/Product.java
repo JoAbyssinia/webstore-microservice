@@ -1,10 +1,13 @@
 package edu.miu.productservice.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.math.BigInteger;
 
 @Document
 @Data
@@ -13,8 +16,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Product {
     @Id
     private Long id;
-    private int productNumber;
+    private String productNumber;
     private String name;
+    private double price;
     private String description;
 
 }
