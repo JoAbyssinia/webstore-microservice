@@ -5,7 +5,7 @@ import edu.miu.productservice.dto.response.ProductResponseDTO;
 import edu.miu.productservice.entity.Product;
 import edu.miu.productservice.repository.ProductRepository;
 import edu.miu.productservice.service.ProductService;
-import edu.miu.productservice.util.ProductUtil;
+import edu.miu.productservice.util.ProductUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,34 +16,29 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
 
 
-    private final ProductRepository repository;
-
-    public ProductServiceImpl(ProductRepository repository) {
-        this.repository = repository;
+    private final ProductRepository productRepository;
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
 
     @Override
     public ProductResponseDTO addProduct(ProductRequestDTO productRequestDto) {
-        ProductUtil util = new ProductUtil();
-        Product product = util.parseProductRequestDTOToProduct(productRequestDto);
-        repository.save(product);
-        return util.parseProductTOProductResponseDTO(product);
+        Product product = ProductUtils.parseProductRequestDTOToProduct(productRequestDto);
+        productRepository.save(product);
+        return ProductUtils.parseProductTOProductResponseDTO(product);
     }
 
     @Override
     public ProductResponseDTO updateProduct(String productNumber, ProductRequestDTO productRequestDto) {
-
-        Optional<Product> found = repository.findByProductNumber(productNumber);
-        if (found.isPresent()) {
-            Product product = found.get();
+        Optional<Product> isProductExist = productRepository.findByProductNumber(productNumber);
+        if (isProductExist.isPresent()) {
+            Product product = isProductExist.get();
             product.setDescription(productRequestDto.getDescription());
             product.setName(productRequestDto.getName());
             product.setPrice(productRequestDto.getPrice());
-            repository.save(product);
-
-
-            return new ProductUtil().parseProductTOProductResponseDTO(product);
+            productRepository.save(product);
+            return ProductUtils.parseProductTOProductResponseDTO(product);
         }
         return null;
 
@@ -51,24 +46,21 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponseDTO deleteProduct(String productNumber) {
-        Optional<Product> found = repository.findByProductNumber(productNumber);
-        found.ifPresent(repository::delete);
-        ProductUtil util = new ProductUtil();
-        return util.parseProductTOProductResponseDTO(found.get());
+        Optional<Product> isProductExist = productRepository.findByProductNumber(productNumber);
+        isProductExist.ifPresent(productRepository::delete);
+        return ProductUtils.parseProductTOProductResponseDTO(isProductExist.get());
     }
 
     @Override
     public List<ProductResponseDTO> getAllProduct() {
         List<ProductResponseDTO> productResponseDTOS = new ArrayList<>();
-
-        repository.findAll().stream().forEach(n -> {
-
+        productRepository.findAll().forEach(product -> {
             productResponseDTOS.add(
                     ProductResponseDTO.builder()
-                            .productNumber(n.getProductNumber())
-                            .name(n.getName())
-                            .price(n.getPrice())
-                            .description(n.getDescription())
+                            .productNumber(product.getProductNumber())
+                            .name(product.getName())
+                            .price(product.getPrice())
+                            .description(product.getDescription())
                             .build());
         });
 
@@ -77,11 +69,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponseDTO getProduct(String productNumber) {
-        Optional<Product> found = repository.findByProductNumber(productNumber);
-        if (found.isPresent()) {
-            ProductUtil util = new ProductUtil();
-            return util.parseProductTOProductResponseDTO(found.get());
-        }
-        return null;
+        Optional<Product> isProductFound = productRepository.findByProductNumber(productNumber);
+        return isProductFound.map(ProductUtils::parseProductTOProductResponseDTO).orElse(null);
     }
 }
