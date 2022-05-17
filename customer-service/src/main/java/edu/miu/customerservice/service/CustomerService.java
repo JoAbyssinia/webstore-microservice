@@ -4,6 +4,8 @@ import edu.miu.customerservice.dto.request.CustomerRequestDTO;
 import edu.miu.customerservice.dto.response.CustomerResponseDTO;
 import edu.miu.customerservice.entity.Customer;
 
+import java.util.List;
+
 public interface CustomerService {
 
     CustomerResponseDTO addCustomer(CustomerRequestDTO customerDTO);
@@ -11,4 +13,6 @@ public interface CustomerService {
     CustomerResponseDTO deleteCustomer(String customerID);
 
     CustomerResponseDTO getCustomerByCustomerID(String customerID);
+
+    List<CustomerResponseDTO> getAllCustomers();
 }
