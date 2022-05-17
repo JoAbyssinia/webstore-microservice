@@ -24,6 +24,7 @@
 		<module>webshop-registry-replica-one</module>
 		<module>config-service</module>
 		<module>stock-service</module>
+		<module>webshop-gateway</module>
 	</modules>
 
 </project>

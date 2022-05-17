@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: webshop-gateway
+  main:
+    web-application-type: reactive
+  zipkin:
+    base-url: http://localhost:8083/
+  cloud:
+    config:
+      uri:
+        - http://localhost:8000
+    gateway:
+      routes:
+        - id: customer-service
+          uri: lb://customer-service
+          predicates:
+            - Path=/api/v1/customers/**
