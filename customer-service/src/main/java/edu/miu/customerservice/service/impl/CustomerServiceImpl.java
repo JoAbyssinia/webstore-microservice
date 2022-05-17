@@ -9,6 +9,7 @@ import edu.miu.customerservice.util.CustomerUtils;
 import org.springframework.stereotype.Service;
 
 import javax.naming.NotContextException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,4 +45,13 @@ public class CustomerServiceImpl implements CustomerService {
         Optional<Customer> isCustomerExist = customerRepository.findByCustomerID(customerID);
         return isCustomerExist.map(CustomerUtils::parseCustomerToCustomerResponseDTO).orElse(null);
     }
+
+    @Override
+    public List<CustomerResponseDTO> getAllCustomers() {
+        List<Customer> customers = customerRepository.findAll();
+        return CustomerUtils.parseCustomersToCustomerResponseDTOs(customers);
+
+    }
+
+
 }

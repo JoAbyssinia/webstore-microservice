@@ -6,6 +6,8 @@ import edu.miu.customerservice.entity.Address;
 import edu.miu.customerservice.entity.Contact;
 import edu.miu.customerservice.entity.Customer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class CustomerUtils {
@@ -49,6 +51,17 @@ public class CustomerUtils {
 
         // this will convert any number sequence into 6 character.
         return String.format("%06d", number);
+    }
+
+    public static List<CustomerResponseDTO> parseCustomersToCustomerResponseDTOs(List<Customer> customers){
+        if(customers.isEmpty()){
+            return null;
+        }
+        List<CustomerResponseDTO> responseDTOS = new ArrayList<>();
+        for (Customer customer : customers) {
+            responseDTOS.add(CustomerUtils.parseCustomerToCustomerResponseDTO(customer));
+        }
+        return responseDTOS;
     }
 
 }

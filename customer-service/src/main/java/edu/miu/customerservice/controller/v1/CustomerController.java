@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -50,6 +51,20 @@ public class CustomerController {
         }
         return new ResponseEntity<>(
                 customerByCustomerID.get(),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<?> getAllCustomers() {
+        Optional<List<CustomerResponseDTO>> customerResponseDTOList =
+                Optional.ofNullable(customerService.getAllCustomers());
+        if(customerResponseDTOList.isEmpty()){
+            return new ResponseEntity<>(
+                    getGenericCustomerError("Customers Not Found"),
+                    HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(
+                customerResponseDTOList.get(),
                 HttpStatus.OK);
     }
 
