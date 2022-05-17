@@ -6,4 +6,5 @@ spring:
       database: webstore
       host: localhost
       port: 27017
-
+  zipkin:
+    base-url: http://localhost:8083/
