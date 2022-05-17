@@ -22,7 +22,7 @@ public class ProductController {
     @PostMapping
     ResponseEntity<?> addProduct(@RequestBody ProductRequestDTO productRequestDTO) {
         ProductResponseDTO productResponseDTO = productService.addProduct(productRequestDTO);
-        return new ResponseEntity<ProductResponseDTO>(productResponseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping
@@ -34,28 +34,29 @@ public class ProductController {
     ResponseEntity<?> getProduct(@PathVariable String productNumber) {
         ProductResponseDTO productResponseDTO = productService.getProduct(productNumber);
         if (productResponseDTO != null) {
-            return new ResponseEntity<>(productService.getProduct(productNumber), HttpStatus.OK);
+            return new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
         }
         return new ResponseEntity<>("Can't find product with the product number: " + productNumber,
-                HttpStatus.NO_CONTENT);
+                HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/{productnumber}")
-    ResponseEntity<?> deleteProduct(@PathVariable String productnumber) {
-        ProductResponseDTO deleteProduct = productService.deleteProduct(productnumber);
+    @DeleteMapping("/{productNumber}")
+    ResponseEntity<?> deleteProduct(@PathVariable String productNumber) {
+        ProductResponseDTO deleteProduct = productService.deleteProduct(productNumber);
         return new ResponseEntity<>(deleteProduct, HttpStatus.OK);
     }
 
-    @PutMapping("/{productnumber}")
-    ResponseEntity<?> updateProduct(@PathVariable String productnumber, @RequestBody ProductRequestDTO productRequestDTO) {
+    @PutMapping("/{productNumber}")
+    ResponseEntity<?> updateProduct(@PathVariable String productNumber, @RequestBody ProductRequestDTO productRequestDTO) {
 
-        ProductResponseDTO responseDTO = productService.updateProduct(productnumber, productRequestDTO);
+        ProductResponseDTO productResponseDTO = productService.updateProduct(productNumber, productRequestDTO);
 
-        if (responseDTO != null) {
-            return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        if (productResponseDTO != null) {
+            return new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>("product with this product number " + productnumber + " couldn't find", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("product with this product number " + productNumber + " couldn't find",
+                HttpStatus.NOT_FOUND);
 
     }
 

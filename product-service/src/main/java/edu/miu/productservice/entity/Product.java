@@ -15,7 +15,7 @@ import java.math.BigInteger;
 @AllArgsConstructor
 public class Product {
     @Id
-    private Long id;
+    private BigInteger id;
     private String productNumber;
     private String name;
     private Double price;
