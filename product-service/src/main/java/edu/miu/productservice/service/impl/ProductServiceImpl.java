@@ -1,8 +1,11 @@
 package edu.miu.productservice.service.impl;
 
 import edu.miu.productservice.dto.request.ProductRequestDTO;
+import edu.miu.productservice.dto.request.StockRequestDTO;
 import edu.miu.productservice.dto.response.ProductResponseDTO;
+import edu.miu.productservice.dto.response.StockResponseDTO;
 import edu.miu.productservice.entity.Product;
+import edu.miu.productservice.feignClient.StockInterface;
 import edu.miu.productservice.repository.ProductRepository;
 import edu.miu.productservice.service.ProductService;
 import edu.miu.productservice.util.ProductUtils;
@@ -17,15 +20,26 @@ public class ProductServiceImpl implements ProductService {
 
 
     private final ProductRepository productRepository;
-    public ProductServiceImpl(ProductRepository productRepository) {
+
+    private final StockInterface stockInterface;
+
+    public ProductServiceImpl(ProductRepository productRepository, StockInterface stockInterface) {
         this.productRepository = productRepository;
+        this.stockInterface = stockInterface;
     }
 
 
     @Override
     public ProductResponseDTO addProduct(ProductRequestDTO productRequestDto) {
+
         Product product = ProductUtils.parseProductRequestDTOToProduct(productRequestDto);
+
         productRepository.save(product);
+
+        StockRequestDTO stockRequestDTO = StockRequestDTO.builder()
+                .productNumber(productRequestDto.getProductNumber())
+                .quantity(productRequestDto.getQuantity()).build();
+        stockInterface.addStock(stockRequestDTO);
         return ProductUtils.parseProductTOProductResponseDTO(product);
     }
 
@@ -48,6 +62,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDTO deleteProduct(String productNumber) {
         Optional<Product> isProductExist = productRepository.findByProductNumber(productNumber);
         isProductExist.ifPresent(productRepository::delete);
+
         return ProductUtils.parseProductTOProductResponseDTO(isProductExist.get());
     }
 

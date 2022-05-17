@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigInteger;
+
 @Document
 @Data
 @NoArgsConstructor
@@ -14,7 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Stock {
 
     @Id
-    private Long id;
+    private BigInteger id;
     private String productNumber;
     private Integer quantity;
 }
