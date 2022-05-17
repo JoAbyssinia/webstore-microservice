@@ -62,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDTO deleteProduct(String productNumber) {
         Optional<Product> isProductExist = productRepository.findByProductNumber(productNumber);
         isProductExist.ifPresent(productRepository::delete);
-
+        stockInterface.deleteStock(productNumber);
         return ProductUtils.parseProductTOProductResponseDTO(isProductExist.get());
     }
 
@@ -85,6 +85,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDTO getProduct(String productNumber) {
         Optional<Product> isProductFound = productRepository.findByProductNumber(productNumber);
-        return isProductFound.map(ProductUtils::parseProductTOProductResponseDTO).orElse(null);
+
+        if (isProductFound.isPresent()) {
+            Product product = isProductFound.get();
+            StockResponseDTO stockResponseDTO = stockInterface.getStock(productNumber);
+
+            return ProductResponseDTO.builder()
+                    .productNumber(product.getProductNumber())
+                    .description(product.getDescription())
+                    .name(product.getName())
+                    .price(product.getPrice())
+                    .quantity(stockResponseDTO.getQuantity())
+                    .build();
+        }
+        return null;
     }
 }

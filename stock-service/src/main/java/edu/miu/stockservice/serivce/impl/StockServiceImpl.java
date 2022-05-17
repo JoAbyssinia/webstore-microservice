@@ -47,7 +47,7 @@ public class StockServiceImpl implements StockService {
         Optional<Stock> isFound = stockRepository.findByProductNumber(productNumber);
         if (isFound.isPresent()) {
             Stock stock = isFound.get();
-            stockRepository.save(stock);
+            stockRepository.delete(stock);
             return StockUtils.parseStockToStockResponseDTO(stock);
         }
         return null;
