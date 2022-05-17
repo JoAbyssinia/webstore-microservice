@@ -1,11 +1,7 @@
-spring:
-  application:
-    name: customer-service
-
 server:
   port: 8090
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8081/eureka,http://localhost:8082/eureka
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8081/eureka,http://localhost:8082/eureka
