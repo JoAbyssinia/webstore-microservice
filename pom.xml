@@ -23,6 +23,7 @@
 		<module>webshop-registry</module>
 		<module>webshop-registry-replica-one</module>
 		<module>config-service</module>
+		<module>stock-service</module>
 	</modules>
 
 </project>
