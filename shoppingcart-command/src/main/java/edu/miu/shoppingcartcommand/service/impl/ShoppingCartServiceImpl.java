@@ -1,11 +1,9 @@
 package edu.miu.shoppingcartcommand.service.impl;
 
+import edu.miu.shoppingcartcommand.dto.request.ProductChangeQuantityRequestDTO;
 import edu.miu.shoppingcartcommand.dto.request.ProductRequestDTO;
 import edu.miu.shoppingcartcommand.dto.request.ShoppingCartRequestDTO;
-import edu.miu.shoppingcartcommand.dto.response.ProductResponseDTO;
-import edu.miu.shoppingcartcommand.dto.response.ProductResponseFeignDTO;
-import edu.miu.shoppingcartcommand.dto.response.ShoppingCartResponseDTO;
-import edu.miu.shoppingcartcommand.dto.response.StockResponseFeignDTO;
+import edu.miu.shoppingcartcommand.dto.response.*;
 import edu.miu.shoppingcartcommand.entity.ProductLine;
 import edu.miu.shoppingcartcommand.entity.ShoppingCart;
 import edu.miu.shoppingcartcommand.error.GenericShoppingCartError;
@@ -21,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static edu.miu.shoppingcartcommand.utils.ShoppingCartUtils.parseProductResponseFeignDTOToProductLine;
 
@@ -117,6 +116,54 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             return productResponseDTO;
         }else{
             throw new GenericShoppingCartError("Product with id: " + productRequestDTO.getProductNumber() + " not found!");
+        }
+    }
+
+    public ProductChangeQuantityResponseDTO changeQuantity(String cartNumber, ProductChangeQuantityRequestDTO
+            productChangeQuantityRequestDTO) throws GenericShoppingCartError {
+        ProductChangeQuantityResponseDTO productChangeQuantityResponseDTO = new ProductChangeQuantityResponseDTO();
+        ProductResponseFeignDTO productResponseFeignDTO = new ProductResponseFeignDTO();
+
+        Optional<ShoppingCart> isShoppingCartExist = shoppingCartRepository.findByCartNumber(cartNumber);
+        if (isShoppingCartExist.isEmpty()) {
+            throw new GenericShoppingCartError("Shopping Cart Not Available!");
+        }
+
+        Optional<ProductResponseFeignDTO> productFeignResponse = Optional.ofNullable(
+                productFeignInterface.getProduct(
+                        productChangeQuantityRequestDTO.getProductNumber()));
+
+        if(productFeignResponse.isPresent()) {
+            List<ProductLine> productLineList = isShoppingCartExist.get().getProductLines();
+            for(ProductLine productLine: productLineList){
+                if (productLine.getProduct().getProductNumber().equals(productChangeQuantityRequestDTO.getProductNumber())){
+                    Optional<StockResponseFeignDTO> stockFeignResponse = Optional.ofNullable(
+                            stockFeignInterface.getStock(productChangeQuantityRequestDTO.getProductNumber()));
+                    if (stockFeignResponse.get().getQuantity() >= productChangeQuantityRequestDTO.getQuantity()) {
+                        productLine.setQuantity(productChangeQuantityRequestDTO.getQuantity());
+                        productResponseFeignDTO = ProductResponseFeignDTO.builder().productNumber(productLine.getProduct().getProductNumber())
+                                .name(productLine.getProduct().getName())
+                                .price(productLine.getProduct().getPrice())
+                                .description(productLine.getProduct().getDescription())
+                                .quantity(productLine.getQuantity())
+                                .build();
+                        shoppingCartRepository.save(isShoppingCartExist.get());
+                    }else {
+                        try {
+                            throw new GenericShoppingCartError("The requested quantity is not available. Only " +
+                                    stockFeignResponse.get().getQuantity() + "left!");
+                        } catch (GenericShoppingCartError e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                }
+            }
+              productChangeQuantityResponseDTO.setCartNumber(cartNumber);
+              productChangeQuantityResponseDTO.setProductResponseFeignDTO(productResponseFeignDTO);
+                return productChangeQuantityResponseDTO;
+            }else{
+            throw new GenericShoppingCartError("Product with id: " + productChangeQuantityRequestDTO.getProductNumber() + " not found!");
         }
     }
 
