@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: shoppingcart-command
+  cloud:
+    config:
+      uri:
+        - http://localhost:8000
