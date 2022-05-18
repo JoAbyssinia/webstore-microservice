@@ -1,6 +1,10 @@
 package edu.miu.shoppingcartcommand.controller.v1;
 
+import edu.miu.shoppingcartcommand.dto.request.ProductChangeQuantityRequestDTO;
+import edu.miu.shoppingcartcommand.dto.request.ProductRequestDTO;
 import edu.miu.shoppingcartcommand.dto.request.ShoppingCartRequestDTO;
+import edu.miu.shoppingcartcommand.dto.response.ProductChangeQuantityResponseDTO;
+import edu.miu.shoppingcartcommand.dto.response.ProductResponseDTO;
 import edu.miu.shoppingcartcommand.dto.response.ShoppingCartResponseDTO;
 import edu.miu.shoppingcartcommand.error.GenericShoppingCartError;
 import edu.miu.shoppingcartcommand.service.ShoppingCartService;
@@ -40,17 +44,55 @@ public class ShoppingCartController {
         }
     }
 
-    @PostMapping("/{cartNumber}/add")
+    @PostMapping("/{cartNumber}/product/add")
     public ResponseEntity<?> addProduct(@PathVariable String cartNumber,
                                         @RequestBody ShoppingCartRequestDTO shoppingCartRequestDTO){
         try {
             ShoppingCartResponseDTO shoppingCartResponseDTO =
                     shoppingCartService.addProduct(cartNumber, shoppingCartRequestDTO);
             if(shoppingCartResponseDTO!= null) {
-                return new ResponseEntity<>(shoppingCartResponseDTO, HttpStatus.CREATED);
+                return new ResponseEntity<>(shoppingCartResponseDTO, HttpStatus.OK);
             }else{
                 return new ResponseEntity<>(
                         getGenericShoppingCartError("The product with id : " + shoppingCartRequestDTO.getProductNumber() + " not found!"),
+                        HttpStatus.NOT_FOUND);
+            }
+        }catch (GenericShoppingCartError ex){
+            return new ResponseEntity<>(
+                    ex.getMessage(),
+                    HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{cartNumber}/product/remove")
+    public ResponseEntity<?> removeProduct(@PathVariable String cartNumber, @RequestBody ProductRequestDTO productRequestDTO){
+        try {
+            ProductResponseDTO productResponseDTO =
+                    shoppingCartService.removeProduct(cartNumber, productRequestDTO);
+            if(productResponseDTO!= null) {
+                return new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(
+                        getGenericShoppingCartError("The product with id : " + productRequestDTO.getProductNumber()+ " not found!"),
+                        HttpStatus.NOT_FOUND);
+            }
+        }catch (GenericShoppingCartError ex){
+            return new ResponseEntity<>(
+                    ex.getMessage(),
+                    HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{cartNumber}/product/change-quantity")
+    public ResponseEntity<?> changeQuantity(@PathVariable String cartNumber, @RequestBody ProductChangeQuantityRequestDTO productChangeQuantityRequestDTO){
+        try {
+            ProductChangeQuantityResponseDTO shoppingCartResponseDTO =
+                    shoppingCartService.changeQuantity(cartNumber, productChangeQuantityRequestDTO);
+            if(shoppingCartResponseDTO!= null) {
+                return new ResponseEntity<>(shoppingCartResponseDTO, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(
+                        getGenericShoppingCartError("The product with id : " + productChangeQuantityRequestDTO.getProductNumber() + " not found!"),
                         HttpStatus.NOT_FOUND);
             }
         }catch (GenericShoppingCartError ex){
