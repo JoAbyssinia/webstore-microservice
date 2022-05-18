@@ -6,3 +6,8 @@ eureka:
     fetch-registry: false
     service-url:
       defaultZone: http://localhost:8081/eureka
+
+
+logging:
+  file:
+    name: /home/yohannes-ubuntu/elk-logs/registry-replica-log

@@ -1,2 +1,6 @@
 server:
   port: 8096
+
+logging:
+  file:
+    name: /home/yohannes-ubuntu/elk-logs/stock-log
