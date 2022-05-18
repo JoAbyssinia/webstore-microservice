@@ -1,0 +1,26 @@
+server:
+  port: 8097
+
+logging:
+  file:
+    name: /Users/bijayshrestha/elk-logs/customer-log
+
+spring:
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+    consumer:
+      group-id: gid
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: *
+
+
+
+  logging.level.root= ERROR
+  org.springframework= ERROR
