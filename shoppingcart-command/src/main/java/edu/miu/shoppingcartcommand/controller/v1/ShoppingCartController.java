@@ -6,10 +6,9 @@ import edu.miu.shoppingcartcommand.error.GenericShoppingCartError;
 import edu.miu.shoppingcartcommand.service.ShoppingCartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.ws.rs.Path;
 
 @RestController
 @RequestMapping("/api/v1/shopping-cart")
@@ -27,6 +26,26 @@ public class ShoppingCartController {
         try {
             ShoppingCartResponseDTO shoppingCartResponseDTO =
                     shoppingCartService.addCart(shoppingCartRequestDTO);
+            if(shoppingCartResponseDTO!= null) {
+                return new ResponseEntity<>(shoppingCartResponseDTO, HttpStatus.CREATED);
+            }else{
+                return new ResponseEntity<>(
+                        getGenericShoppingCartError("The product with id : " + shoppingCartRequestDTO.getProductNumber() + " not found!"),
+                        HttpStatus.NOT_FOUND);
+            }
+        }catch (GenericShoppingCartError ex){
+            return new ResponseEntity<>(
+                    ex.getMessage(),
+                    HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/{cartNumber}/add")
+    public ResponseEntity<?> addProduct(@PathVariable String cartNumber,
+                                        @RequestBody ShoppingCartRequestDTO shoppingCartRequestDTO){
+        try {
+            ShoppingCartResponseDTO shoppingCartResponseDTO =
+                    shoppingCartService.addProduct(cartNumber, shoppingCartRequestDTO);
             if(shoppingCartResponseDTO!= null) {
                 return new ResponseEntity<>(shoppingCartResponseDTO, HttpStatus.CREATED);
             }else{

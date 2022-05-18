@@ -22,6 +22,15 @@ public class ShoppingCartUtils {
         ProductLine productLine = new ProductLine(product,requestedQuantity );
         return productLine;
     }
+    public static ProductLine parseProductResponseDTOToProductLine(
+            ProductResponseFeignDTO productResponseFeignDTO, Integer requestedQuantity) {
+        Product product = new Product(productResponseFeignDTO.getProductNumber(),
+                productResponseFeignDTO.getName(),
+                productResponseFeignDTO.getPrice(),
+                productResponseFeignDTO.getDescription());
+        ProductLine productLine = new ProductLine(product,requestedQuantity );
+        return productLine;
+    }
 
     public static ShoppingCartResponseDTO parseShoppingCartToShoppingCartResponseDTO(ShoppingCart shoppingCart, Integer requestedQuantity){
         ShoppingCartResponseDTO shoppingCartResponseDTO = new ShoppingCartResponseDTO();

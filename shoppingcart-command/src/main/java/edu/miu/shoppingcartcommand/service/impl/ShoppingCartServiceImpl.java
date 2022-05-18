@@ -51,12 +51,44 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 shoppingCart.getProductLines().add(productLine);
                 shoppingCart.setCartNumber(generateUniqueCartNumber());
                 shoppingCart = shoppingCartRepository.save(shoppingCart);
-                return ShoppingCartUtils.parseShoppingCartToShoppingCartResponseDTO(shoppingCart, shoppingCartRequestDTO.getQuantity());
+                return ShoppingCartUtils.parseShoppingCartToShoppingCartResponseDTO(shoppingCart,
+                        shoppingCartRequestDTO.getQuantity());
             }else{
-                throw new GenericShoppingCartError("The requested quantity is not available. Only " + stockFeignResponse.get().getQuantity() + "left!");
+                throw new GenericShoppingCartError("The requested quantity is not available. Only " +
+                        stockFeignResponse.get().getQuantity() + "left!");
             }
         }else{
             return null;
+        }
+    }
+
+    @Override
+    public ShoppingCartResponseDTO addProduct(String cartNumber,
+                                              ShoppingCartRequestDTO shoppingCartRequestDTO)
+            throws GenericShoppingCartError {
+        Optional<ShoppingCart> isShoppingCartExist = shoppingCartRepository.findByCartNumber(cartNumber);
+        if (isShoppingCartExist.isEmpty()) {
+            throw new GenericShoppingCartError("Shopping Cart Not Available!");
+        }
+        Optional<ProductResponseFeignDTO> productFeignResponse = Optional.ofNullable(
+                productFeignInterface.getProduct(
+                        shoppingCartRequestDTO.getProductNumber()));
+        if (productFeignResponse.isPresent()) {
+            Optional<StockResponseFeignDTO> stockFeignResponse = Optional.ofNullable(
+                    stockFeignInterface.getStock(shoppingCartRequestDTO.getProductNumber()));
+            if (stockFeignResponse.get().getQuantity() >= shoppingCartRequestDTO.getQuantity()) {
+                ProductLine productLine = parseProductResponseFeignDTOToProductLine(
+                        productFeignResponse.get(), shoppingCartRequestDTO.getQuantity());
+                isShoppingCartExist.get().getProductLines().add(productLine);
+                shoppingCartRepository.save(isShoppingCartExist.get());
+                return ShoppingCartUtils.parseShoppingCartToShoppingCartResponseDTO(isShoppingCartExist.get(),
+                        shoppingCartRequestDTO.getQuantity());
+            } else {
+                throw new GenericShoppingCartError("The requested quantity is not available. Only " +
+                        stockFeignResponse.get().getQuantity() + "left!");
+            }
+        }else{
+            throw new GenericShoppingCartError("Product with id: " + shoppingCartRequestDTO.getProductNumber() + " does not exist!");
         }
     }
 

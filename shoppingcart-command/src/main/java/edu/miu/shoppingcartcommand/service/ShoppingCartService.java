@@ -6,4 +6,6 @@ import edu.miu.shoppingcartcommand.error.GenericShoppingCartError;
 
 public interface ShoppingCartService {
     ShoppingCartResponseDTO addCart(ShoppingCartRequestDTO shoppingCartRequestDTO) throws GenericShoppingCartError;
+
+    ShoppingCartResponseDTO addProduct(String cartNumber, ShoppingCartRequestDTO shoppingCartRequestDTO) throws GenericShoppingCartError;
 }
