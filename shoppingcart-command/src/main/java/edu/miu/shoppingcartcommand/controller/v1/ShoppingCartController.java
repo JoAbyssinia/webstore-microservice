@@ -2,6 +2,7 @@ package edu.miu.shoppingcartcommand.controller.v1;
 
 import edu.miu.shoppingcartcommand.dto.request.ShoppingCartRequestDTO;
 import edu.miu.shoppingcartcommand.dto.response.ShoppingCartResponseDTO;
+import edu.miu.shoppingcartcommand.error.GenericShoppingCartError;
 import edu.miu.shoppingcartcommand.service.ShoppingCartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,25 @@ public class ShoppingCartController {
 
     @PostMapping
     public ResponseEntity<?> addCart(@RequestBody ShoppingCartRequestDTO shoppingCartRequestDTO){
-        ShoppingCartResponseDTO shoppingCartResponseDTO =
-                shoppingCartService.addCart(shoppingCartRequestDTO);
-        return new ResponseEntity<>(shoppingCartResponseDTO, HttpStatus.CREATED);
+        try {
+            ShoppingCartResponseDTO shoppingCartResponseDTO =
+                    shoppingCartService.addCart(shoppingCartRequestDTO);
+            if(shoppingCartResponseDTO!= null) {
+                return new ResponseEntity<>(shoppingCartResponseDTO, HttpStatus.CREATED);
+            }else{
+                return new ResponseEntity<>(
+                        getGenericShoppingCartError("The product with id : " + shoppingCartRequestDTO.getProductNumber() + " not found!"),
+                        HttpStatus.NOT_FOUND);
+            }
+        }catch (GenericShoppingCartError ex){
+            return new ResponseEntity<>(
+                    ex.getMessage(),
+                    HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public GenericShoppingCartError getGenericShoppingCartError(String message){
+        return new GenericShoppingCartError(message);
     }
 
 }

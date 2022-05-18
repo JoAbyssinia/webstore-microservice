@@ -3,12 +3,11 @@ package edu.miu.shoppingcartcommand.dto.response;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class ShoppingCartResponseDTO {
-    private String productNumber;
-    private String name;
-    private Double price;
-    private String description;
-    private Integer quantity;
+    private String cartNumber;
+    private List<ProductLineResponseDTO> productLineResponseDTOList;
 }

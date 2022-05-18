@@ -1,17 +1,14 @@
-package edu.miu.shoppingcartcommand.entity;
+package edu.miu.shoppingcartcommand.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class Product {
+public class ProductResponseFeignDTO {
     private String productNumber;
     private String name;
     private Double price;
     private String description;
+    private Integer quantity;
 }

@@ -1,4 +1,4 @@
-package edu.miu.shoppingcartcommand.entity;
+package edu.miu.shoppingcartcommand.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+public class ProductResponseDTO {
     private String productNumber;
     private String name;
     private Double price;
