@@ -9,6 +9,7 @@ import edu.miu.shoppingcartcommand.entity.ShoppingCart;
 import edu.miu.shoppingcartcommand.error.GenericShoppingCartError;
 import edu.miu.shoppingcartcommand.feignClient.ProductFeignInterface;
 import edu.miu.shoppingcartcommand.feignClient.StockFeignInterface;
+import edu.miu.shoppingcartcommand.integration.KafkaMessage;
 import edu.miu.shoppingcartcommand.repository.ShoppingCartRepository;
 import edu.miu.shoppingcartcommand.service.ShoppingCartService;
 import edu.miu.shoppingcartcommand.utils.ShoppingCartUtils;
@@ -19,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicReference;
+
 
 import static edu.miu.shoppingcartcommand.utils.ShoppingCartUtils.parseProductResponseFeignDTOToProductLine;
 
@@ -30,12 +31,16 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ProductFeignInterface productFeignInterface;
     private final StockFeignInterface stockFeignInterface;
 
+    private final KafkaMessage kafkaMessage;
+
     public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository,
                                    ProductFeignInterface productFeignInterface,
-                                   StockFeignInterface stockFeignInterface) {
+                                   StockFeignInterface stockFeignInterface,
+                                   KafkaMessage kafkaMessage) {
         this.shoppingCartRepository = shoppingCartRepository;
         this.productFeignInterface = productFeignInterface;
         this.stockFeignInterface = stockFeignInterface;
+        this.kafkaMessage = kafkaMessage;
     }
 
     @Override
@@ -47,19 +52,24 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         if (productFeignResponse.isPresent()) {
             Optional<StockResponseFeignDTO> stockFeignResponse = Optional.ofNullable(
                     stockFeignInterface.getStock(shoppingCartRequestDTO.getProductNumber()));
-            if(stockFeignResponse.get().getQuantity() >= shoppingCartRequestDTO.getQuantity()) {
+            if (stockFeignResponse.get().getQuantity() >= shoppingCartRequestDTO.getQuantity()) {
                 ProductLine productLine = parseProductResponseFeignDTOToProductLine(
                         productFeignResponse.get(), shoppingCartRequestDTO.getQuantity());
                 shoppingCart.getProductLines().add(productLine);
                 shoppingCart.setCartNumber(generateUniqueCartNumber());
                 shoppingCart = shoppingCartRepository.save(shoppingCart);
-                return ShoppingCartUtils.parseShoppingCartToShoppingCartResponseDTO(shoppingCart,
+
+                ShoppingCartResponseDTO shoppingCartResponseDTO =
+                        ShoppingCartUtils.parseShoppingCartToShoppingCartResponseDTO(shoppingCart,
                         shoppingCartRequestDTO.getQuantity());
-            }else{
+                kafkaMessage.sendMessage("create-cart", shoppingCartResponseDTO);
+
+                return shoppingCartResponseDTO;
+            } else {
                 throw new GenericShoppingCartError("The requested quantity is not available. Only " +
                         stockFeignResponse.get().getQuantity() + " left!");
             }
-        }else{
+        } else {
             return null;
         }
     }
@@ -89,7 +99,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 throw new GenericShoppingCartError("The requested quantity is not available. Only " +
                         stockFeignResponse.get().getQuantity() + "left!");
             }
-        }else{
+        } else {
             throw new GenericShoppingCartError("Product with id: " + shoppingCartRequestDTO.getProductNumber() + " does not exist!");
         }
     }
@@ -167,13 +177,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }
     }
 
-    protected String generateUniqueCartNumber(){
+
+    protected String generateUniqueCartNumber() {
         Date dNow = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("yyMMddhhmmssMs");
         return generateRandomNumber() + ft.format(dNow);
     }
 
-    public static String generateRandomNumber(){
+    public static String generateRandomNumber() {
         // It will generate 6 digit random Number.
         // from 0 to 999999
         Random rnd = new Random();

@@ -11,6 +11,7 @@ import edu.miu.ShoppingCartQuery.service.ShoppingCartService;
 import edu.miu.ShoppingCartQuery.util.ShoppingCartQueryUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,8 +81,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                     .productNumber(productDTO.getProductNumber())
                     .build();
 
-            shoppingCartQuery.getProductLines().stream().forEach(productLine -> {
-                if (productLine.getProduct().equals(product)){
+            shoppingCartQuery.getProductLines().forEach(productLine -> {
+                if (productLine.getProduct().getProductNumber().equals(product.getProductNumber())) {
                     shoppingCartQuery.getProductLines().remove(productLine);
                     return;
                 }
@@ -96,7 +97,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartQueryResponseDTO changeProduct(String cartNumber, ProductDTO productDTO,Integer quantity) {
+    public ShoppingCartQueryResponseDTO changeProduct(String cartNumber, ProductDTO productDTO, Integer quantity) {
 
         Optional<ShoppingCartQuery> isFoundShoppingCartQuery = shoppingCartQueryRepository.findByCartNumber(cartNumber);
 
@@ -124,17 +125,39 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartQueryResponseDTO deleteShoppingCartQuery(String productNumber) {
+    public ShoppingCartQueryResponseDTO deleteShoppingCartQuery(String cartNumber) {
+        Optional<ShoppingCartQuery> isFoundShoppingCartQuery =
+                shoppingCartQueryRepository.findByCartNumber(cartNumber);
+
+        if (isFoundShoppingCartQuery.isPresent()) {
+            ShoppingCartQuery shoppingCartQuery = isFoundShoppingCartQuery.get();
+            shoppingCartQueryRepository.delete(shoppingCartQuery);
+
+            return ShoppingCartQueryUtils.parseShoppingCartQueryToShoppingCartQueryResponseDTO(shoppingCartQuery);
+        }
         return null;
     }
 
     @Override
-    public ShoppingCartQueryResponseDTO getShoppingCartQuery(String productNumber) {
+    public ShoppingCartQueryResponseDTO getShoppingCartQuery(String cartNumber) {
+        Optional<ShoppingCartQuery> isFoundShoppingCartQuery =
+                shoppingCartQueryRepository.findByCartNumber(cartNumber);
+
+        if (isFoundShoppingCartQuery.isPresent()) {
+            ShoppingCartQuery shoppingCartQuery = isFoundShoppingCartQuery.get();
+            return ShoppingCartQueryUtils.parseShoppingCartQueryToShoppingCartQueryResponseDTO(shoppingCartQuery);
+        }
         return null;
     }
 
     @Override
     public List<ShoppingCartQueryResponseDTO> getAllShoppingCartQuery() {
-        return null;
+        List<ShoppingCartQueryResponseDTO> shoppingCartQueryResponseDTOS = new ArrayList<>();
+        shoppingCartQueryRepository.findAll().forEach(shoppingCartQuery -> {
+            shoppingCartQueryResponseDTOS.add(
+                    ShoppingCartQueryUtils.parseShoppingCartQueryToShoppingCartQueryResponseDTO(shoppingCartQuery));
+
+        });
+        return shoppingCartQueryResponseDTOS;
     }
 }
