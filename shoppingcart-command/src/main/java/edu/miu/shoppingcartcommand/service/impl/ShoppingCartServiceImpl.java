@@ -43,7 +43,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 productFeignInterface.getProduct(
                         shoppingCartRequestDTO.getProductNumber()));
         if (productFeignResponse.isPresent()) {
-            //TODO: CHECK FOR STOCK IN THE STOCK-SERVICE
             Optional<StockResponseFeignDTO> stockFeignResponse = Optional.ofNullable(
                     stockFeignInterface.getStock(shoppingCartRequestDTO.getProductNumber()));
             if(stockFeignResponse.get().getQuantity() >= shoppingCartRequestDTO.getQuantity()) {
@@ -54,7 +53,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 shoppingCart = shoppingCartRepository.save(shoppingCart);
                 return ShoppingCartUtils.parseShoppingCartToShoppingCartResponseDTO(shoppingCart, shoppingCartRequestDTO.getQuantity());
             }else{
-                throw new GenericShoppingCartError("The number of product exceeded");
+                throw new GenericShoppingCartError("The requested quantity is not available. Only " + stockFeignResponse.get().getQuantity() + "left!");
             }
         }else{
             return null;
