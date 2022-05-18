@@ -28,6 +28,7 @@
 		<module>kafka-service</module>
 		<module>shoppingcart-command</module>
 		<module>shoppingcart-query</module>
+		<module>order-service</module>
 	</modules>
 
 </project>
