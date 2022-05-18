@@ -27,6 +27,7 @@
 		<module>webshop-gateway</module>
 		<module>kafka-service</module>
 		<module>shoppingcart-command</module>
+		<module>ShoppingCart-Query</module>
 	</modules>
 
 </project>
