@@ -1,6 +1,8 @@
 package edu.miu.shoppingcartcommand.service.impl;
 
+import edu.miu.shoppingcartcommand.dto.request.ProductRequestDTO;
 import edu.miu.shoppingcartcommand.dto.request.ShoppingCartRequestDTO;
+import edu.miu.shoppingcartcommand.dto.response.ProductResponseDTO;
 import edu.miu.shoppingcartcommand.dto.response.ProductResponseFeignDTO;
 import edu.miu.shoppingcartcommand.dto.response.ShoppingCartResponseDTO;
 import edu.miu.shoppingcartcommand.dto.response.StockResponseFeignDTO;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -55,7 +58,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                         shoppingCartRequestDTO.getQuantity());
             }else{
                 throw new GenericShoppingCartError("The requested quantity is not available. Only " +
-                        stockFeignResponse.get().getQuantity() + "left!");
+                        stockFeignResponse.get().getQuantity() + " left!");
             }
         }else{
             return null;
@@ -89,6 +92,31 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             }
         }else{
             throw new GenericShoppingCartError("Product with id: " + shoppingCartRequestDTO.getProductNumber() + " does not exist!");
+        }
+    }
+
+    public ProductResponseDTO removeProduct(String cartNumber, ProductRequestDTO productRequestDTO) throws GenericShoppingCartError {
+        boolean found = false;
+        ProductResponseDTO productResponseDTO = new ProductResponseDTO();
+                Optional<ShoppingCart> isShoppingCartExist = shoppingCartRepository.findByCartNumber(cartNumber);
+        if (isShoppingCartExist.isEmpty()) {
+            throw new GenericShoppingCartError("Shopping Cart Not Available!");
+        }
+        List<ProductLine> productLineList = isShoppingCartExist.get().getProductLines();
+        for (ProductLine productLine : productLineList) {
+            if (productLine.getProduct().getProductNumber().equals(productRequestDTO.getProductNumber())) {
+                found = true;
+                productResponseDTO = new ProductResponseDTO(productLine.getProduct().getProductNumber(),
+                        productLine.getProduct().getName(), productLine.getProduct().getPrice(), productLine.getProduct().getDescription());
+                productLineList.remove(productLine);
+                break;
+            }
+        }
+        if (found){
+            shoppingCartRepository.save(isShoppingCartExist.get());
+            return productResponseDTO;
+        }else{
+            throw new GenericShoppingCartError("Product with id: " + productRequestDTO.getProductNumber() + " not found!");
         }
     }
 

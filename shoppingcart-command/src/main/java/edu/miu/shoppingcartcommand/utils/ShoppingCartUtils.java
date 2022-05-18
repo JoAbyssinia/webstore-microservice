@@ -32,7 +32,8 @@ public class ShoppingCartUtils {
         return productLine;
     }
 
-    public static ShoppingCartResponseDTO parseShoppingCartToShoppingCartResponseDTO(ShoppingCart shoppingCart, Integer requestedQuantity){
+    public static ShoppingCartResponseDTO parseShoppingCartToShoppingCartResponseDTO(ShoppingCart shoppingCart,
+                                                                                     Integer requestedQuantity){
         ShoppingCartResponseDTO shoppingCartResponseDTO = new ShoppingCartResponseDTO();
         shoppingCartResponseDTO.setCartNumber(shoppingCart.getCartNumber());
         List<ProductLineResponseDTO> productLineResponseDTOS = new ArrayList<>();
@@ -51,4 +52,5 @@ public class ShoppingCartUtils {
         shoppingCartResponseDTO.setProductLineResponseDTOList(productLineResponseDTOS);
         return shoppingCartResponseDTO;
     }
+
 }

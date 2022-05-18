@@ -1,6 +1,8 @@
 package edu.miu.shoppingcartcommand.controller.v1;
 
+import edu.miu.shoppingcartcommand.dto.request.ProductRequestDTO;
 import edu.miu.shoppingcartcommand.dto.request.ShoppingCartRequestDTO;
+import edu.miu.shoppingcartcommand.dto.response.ProductResponseDTO;
 import edu.miu.shoppingcartcommand.dto.response.ShoppingCartResponseDTO;
 import edu.miu.shoppingcartcommand.error.GenericShoppingCartError;
 import edu.miu.shoppingcartcommand.service.ShoppingCartService;
@@ -40,7 +42,7 @@ public class ShoppingCartController {
         }
     }
 
-    @PostMapping("/{cartNumber}/add")
+    @PostMapping("/{cartNumber}/add-product")
     public ResponseEntity<?> addProduct(@PathVariable String cartNumber,
                                         @RequestBody ShoppingCartRequestDTO shoppingCartRequestDTO){
         try {
@@ -51,6 +53,25 @@ public class ShoppingCartController {
             }else{
                 return new ResponseEntity<>(
                         getGenericShoppingCartError("The product with id : " + shoppingCartRequestDTO.getProductNumber() + " not found!"),
+                        HttpStatus.NOT_FOUND);
+            }
+        }catch (GenericShoppingCartError ex){
+            return new ResponseEntity<>(
+                    ex.getMessage(),
+                    HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{cartNumber}/remove-product")
+    public ResponseEntity<?> removeProduct(@PathVariable String cartNumber, @RequestBody ProductRequestDTO productRequestDTO){
+        try {
+            ProductResponseDTO productResponseDTO =
+                    shoppingCartService.removeProduct(cartNumber, productRequestDTO);
+            if(productResponseDTO!= null) {
+                return new ResponseEntity<>(productResponseDTO, HttpStatus.CREATED);
+            }else{
+                return new ResponseEntity<>(
+                        getGenericShoppingCartError("The product with id : " + productRequestDTO.getProductNumber()+ " not found!"),
                         HttpStatus.NOT_FOUND);
             }
         }catch (GenericShoppingCartError ex){
