@@ -1,2 +1,6 @@
 server:
   port: 8095
+
+logging:
+  file:
+    name: /Users/bijayshrestha/elk-logs/shoppingcart-command-log
