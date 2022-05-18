@@ -1,2 +1,18 @@
 server:
   port: 8095
+
+spring:
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+
+
+#  spring.kafka.bootstrap-servers=localhost:9092
+#  spring.kafka.producer.key-serializer= org.apache.kafka.common.serialization.StringSerializer
+#  spring.kafka.producer.value-serializer= org.springframework.kafka.support.serializer.JsonSerializer
+#  spring.kafka.consumer.properties.spring.json.trusted.packages=kafka
+#  spring.kafka.producer.properties.spring.json.add.type.headers=false

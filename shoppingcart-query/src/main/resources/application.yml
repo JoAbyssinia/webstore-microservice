@@ -18,9 +18,8 @@ spring:
         spring:
           json:
             trusted:
-              packages: *
+              packages: edu.miu.ShoppingCartQuery.intergration
 
 
-
-  logging.level.root= ERROR
-  org.springframework= ERROR
+#logging.level.root = ERROR
+#org.springframework= ERROR
