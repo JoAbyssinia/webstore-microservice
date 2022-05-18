@@ -59,7 +59,6 @@
 			<artifactId>spring-cloud-starter-zipkin</artifactId>
 			<version>2.2.8.RELEASE</version>
 		</dependency>
-
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
