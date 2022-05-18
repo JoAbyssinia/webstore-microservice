@@ -25,6 +25,7 @@
 		<module>config-service</module>
 		<module>stock-service</module>
 		<module>webshop-gateway</module>
+		<module>kafka-service</module>
 	</modules>
 
 </project>

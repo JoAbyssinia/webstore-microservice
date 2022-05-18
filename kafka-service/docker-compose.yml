@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2182:2181"
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  magic:
+    image: "digitsy/kafka-magic"
+    container_name: kafka_magic
+    ports:
+      - "9000:80"
+    volumes:
+      - .:/config
+    environment:
+        KMAGIC_ALLOW_TOPIC_DELETE: "true"
+        KMAGIC_ALLOW_SCHEMA_DELETE: "true"
+        KMAGIC_CONFIG_STORE_TYPE: "file"
+        KMAGIC_CONFIG_STORE_CONNECTION: "Data Source=/config/KafkaMagicConfig.db;"
+
+
+# to start three of services at ones use this command(meaning run the composer)
+# -> docker-compose -f docker-compose.yml up
