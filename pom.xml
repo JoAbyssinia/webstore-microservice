@@ -26,6 +26,7 @@
 		<module>stock-service</module>
 		<module>webshop-gateway</module>
 		<module>kafka-service</module>
+		<module>shoppingcart-command</module>
 	</modules>
 
 </project>

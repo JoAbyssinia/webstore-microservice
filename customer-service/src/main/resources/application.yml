@@ -1,10 +1,6 @@
 server:
   port: 8090
-spring:
-  data:
-    mongodb:
-      database: webstore
-      host: localhost
-      port: 27017
-  zipkin:
-    base-url: http://localhost:8083/
+
+logging:
+  file:
+    name: /Users/bijayshrestha/elk-logs/customer-log
