@@ -1,6 +1,6 @@
 server:
-   port: 8091
+  port: 8091
 
- logging:
-   file:
-     name: /Users/bijayshrestha/elk-logs/product-log
+logging:
+  file:
+    name: /Users/bijayshrestha/elk-logs/product-log
