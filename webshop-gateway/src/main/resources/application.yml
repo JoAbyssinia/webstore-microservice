@@ -1,3 +1,6 @@
 server:
   port: 8080
 
+logging:
+  file:
+    name: /Users/bijayshrestha/elk-logs/stock-log

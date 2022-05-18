@@ -3,4 +3,4 @@ server:
 
  logging:
    file:
-     name: /Users/bijayshrestha/elk-logs/product-service
+     name: /Users/bijayshrestha/elk-logs/product-log
