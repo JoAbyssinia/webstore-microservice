@@ -23,5 +23,9 @@ spring:
           uri: lb://stock-service
           predicates:
             - Path=/api/v1/stock/**
+        - id: shoppingcart-command
+          uri: lb://shoppingcart-command
+          predicates:
+            - Path=/api/v1/shopping-cart/**
 
 
