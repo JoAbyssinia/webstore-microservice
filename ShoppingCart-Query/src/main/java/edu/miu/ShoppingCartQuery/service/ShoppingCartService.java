@@ -16,7 +16,7 @@ public interface ShoppingCartService {
 
     ShoppingCartQueryResponseDTO removeProduct(String cartNumber, ProductDTO productDTO);
 
-    ShoppingCartQueryResponseDTO changeProduct(String cartNumber, ProductDTO productDTO);
+    ShoppingCartQueryResponseDTO changeProduct(String cartNumber, ProductDTO productDTO,Integer quantity);
 
     ShoppingCartQueryResponseDTO deleteShoppingCartQuery(String cartNumber);
 

@@ -87,26 +87,39 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 }
             });
 
-
-
-
-
-            shoppingCartQuery.getProductLines();
-
-
-
-
             shoppingCartQueryRepository.save(shoppingCartQuery);
 
             return ShoppingCartQueryUtils.parseShoppingCartQueryToShoppingCartQueryResponseDTO(shoppingCartQuery);
         }
 
-
         return null;
     }
 
     @Override
-    public ShoppingCartQueryResponseDTO changeProduct(String cartNumber, ProductDTO productDTO) {
+    public ShoppingCartQueryResponseDTO changeProduct(String cartNumber, ProductDTO productDTO,Integer quantity) {
+
+        Optional<ShoppingCartQuery> isFoundShoppingCartQuery = shoppingCartQueryRepository.findByCartNumber(cartNumber);
+
+        if (isFoundShoppingCartQuery.isPresent()) {
+
+            ShoppingCartQuery shoppingCartQuery = isFoundShoppingCartQuery.get();
+
+            Product product = Product.builder()
+                    .description(productDTO.getDescription())
+                    .name(productDTO.getName())
+                    .price(productDTO.getPrice())
+                    .productNumber(productDTO.getProductNumber())
+                    .build();
+
+            shoppingCartQuery.getProductLines().stream().forEach(productLine -> {
+                if (productLine.getProduct().equals(product)) {
+                    productLine.setQuantity(quantity);
+
+                }
+            });
+            shoppingCartQueryRepository.save(shoppingCartQuery);
+            return ShoppingCartQueryUtils.parseShoppingCartQueryToShoppingCartQueryResponseDTO(shoppingCartQuery);
+        }
         return null;
     }
 
