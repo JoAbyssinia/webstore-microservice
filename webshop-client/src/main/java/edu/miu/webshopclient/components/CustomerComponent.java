@@ -19,13 +19,14 @@ public class CustomerComponent implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        /**
+
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<Customer> request = new HttpEntity<>(requestHeaders);
         Gson gson = new Gson();
-
         String customerServerUrl = "http://localhost:8090/api/v1/customers/";
+
+        /**
         String customerID = "11111";
 
         System.out.println("##### REQUESTING CUSTOMER  #####");

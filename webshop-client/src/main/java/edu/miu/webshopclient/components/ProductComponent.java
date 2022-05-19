@@ -27,7 +27,7 @@ public class ProductComponent implements ApplicationRunner {
         Gson gson = new Gson();
         String productServerUrl = "http://localhost:8080/api/v1/product/";
 
-
+/**
         System.out.println("##### REQUESTING PRODUCT \n #####");
 
         System.out.println("***** +++++ ADDING  PRODUCT +++++ *****");
@@ -47,45 +47,45 @@ public class ProductComponent implements ApplicationRunner {
 
         ProductResponseDTO productCreatedResultReturn = gson.fromJson(productResult1.getBody(), ProductResponseDTO.class);
 
+		System.out.println("RESPONSE: " + productCreatedResultReturn.toString());
         System.out.println("############# PRODUCT CREATED SUCCESSFULLY #############");
-        
-		System.out.println(productCreatedResultReturn.toString() + "\n");
+
 
         System.out.println("***** +++++ UPDATING  PRODUCT +++++ *****");
         System.out.println("##### ----- PUT /api/v1/product ----- ##### ");
 
-		Product product2 = Product.builder().productNumber(productCreatedResultReturn
-                        .getProductNumber())
+		Product product2 = Product.builder()
+                .productNumber(productCreatedResultReturn.getProductNumber())
                 .name("M1 Mac Air 13")
                 .price(1299.00)
                 .description("Apple Product Laptops")
                 .build();
 
-		HttpEntity<?> request2 = new HttpEntity<>(product2,requestHeaders);
+		HttpEntity<?> request2 = new HttpEntity<>(product2, requestHeaders);
 		ResponseEntity<String> productResult2 = restTemplate.exchange(
 				productServerUrl+"/"+productCreatedResultReturn.getProductNumber(),
 				HttpMethod.PUT, request2, String.class);
 
 		ProductResponseDTO productUpdatedResultReturn = gson.fromJson(productResult2.getBody(), ProductResponseDTO.class);
-		System.out.println(productUpdatedResultReturn.toString());
-		System.out.println();
 
+        System.out.println("RESPONSE: " + productUpdatedResultReturn.toString() + "\n");
         System.out.println("############# PRODUCT UPDATED SUCCESSFULLY #############");
 
 
-////		********************** Get Product **********************
-//
-//		System.out.println("********************** Get Product with ID **********************");
-//
-//		ResponseEntity<String> productResult3 = restTemplate.exchange(
-//				productServerUrl+productCreatedResultReturn.getData().getProductNumber(),
-//				HttpMethod.GET, request, String.class);
-//
-//
-//		ProductResponse productResultReturn = gson.fromJson(productResult3.getBody(), ProductResponse.class);
-//		System.out.println(productResultReturn.getData().toString());
+        System.out.println("***** +++++ GET PRODUCT BY PRODUCT NUMBER +++++ *****");
+        System.out.println("##### ----- GET /api/v1/product/{productNumber} ----- ##### ");
 
 
-//		********************** End Product **********************
+		ResponseEntity<String> productResult3 = restTemplate.exchange(
+				productServerUrl+productCreatedResultReturn.getProductNumber(),
+				HttpMethod.GET, request, String.class);
+
+        ProductResponseDTO productResultReturn = gson.fromJson(productResult3.getBody(), ProductResponseDTO.class);
+        System.out.println("RESPONSE: " + productResultReturn.toString() + "\n");
+
+        System.out.println("############# PRODUCT FETCHED SUCCESSFULLY #############");
+
+
+ **/
     }
 }
