@@ -48,33 +48,31 @@ public class ProductComponent implements ApplicationRunner {
         ProductResponseDTO productCreatedResultReturn = gson.fromJson(productResult1.getBody(), ProductResponseDTO.class);
 
         System.out.println("############# PRODUCT CREATED SUCCESSFULLY #############");
-
-
-		System.out.println(productCreatedResultReturn.toString());
-		System.out.println();
+        
+		System.out.println(productCreatedResultReturn.toString() + "\n");
 
         System.out.println("***** +++++ UPDATING  PRODUCT +++++ *****");
         System.out.println("##### ----- PUT /api/v1/product ----- ##### ");
-//
-//		System.out.println("********************** Update Product **********************");
-//
-//		Product product2 = new Product(productCreatedResultReturn.getData().getProductNumber(),"M1 Mac Air 13", 1299, "Apple Product Laptops");
-//
-//		HttpEntity<?> request2 = new HttpEntity<>(product2,requestHeaders);
-//		ResponseEntity<String> productResult2 = restTemplate.exchange(
-//				productServerUrl+"/"+productCreatedResultReturn.getData().getProductNumber(),
-//				HttpMethod.PUT, request2, String.class);
-//
-//		ProductResponse productUpdatedResultReturn = gson.fromJson(productResult2.getBody(), ProductResponse.class);
-//		System.out.println(productUpdatedResultReturn.getData().toString());
-//		System.out.println();
-//
-//
-//
-//
-//
-//
-//
+
+		Product product2 = Product.builder().productNumber(productCreatedResultReturn
+                        .getProductNumber())
+                .name("M1 Mac Air 13")
+                .price(1299.00)
+                .description("Apple Product Laptops")
+                .build();
+
+		HttpEntity<?> request2 = new HttpEntity<>(product2,requestHeaders);
+		ResponseEntity<String> productResult2 = restTemplate.exchange(
+				productServerUrl+"/"+productCreatedResultReturn.getProductNumber(),
+				HttpMethod.PUT, request2, String.class);
+
+		ProductResponseDTO productUpdatedResultReturn = gson.fromJson(productResult2.getBody(), ProductResponseDTO.class);
+		System.out.println(productUpdatedResultReturn.toString());
+		System.out.println();
+
+        System.out.println("############# PRODUCT UPDATED SUCCESSFULLY #############");
+
+
 ////		********************** Get Product **********************
 //
 //		System.out.println("********************** Get Product with ID **********************");
