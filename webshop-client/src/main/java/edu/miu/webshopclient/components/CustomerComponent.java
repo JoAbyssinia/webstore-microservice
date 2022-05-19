@@ -18,6 +18,8 @@ public class CustomerComponent implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+
+        /**
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<Customer> request = new HttpEntity<>(requestHeaders);
@@ -63,6 +65,6 @@ public class CustomerComponent implements ApplicationRunner {
         Customer customerCreatedResult = gson.fromJson(customer.getBody(), Customer.class);
         System.out.println("############# CUSTOMER CREATED SUCCESSFULLY #############");
         System.out.println(customerCreatedResult.toString());
-
+        **/
     }
 }
