@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>edu.miu</groupId>
-	<artifactId>ShoppingCart-Query</artifactId>
+	<artifactId>shoppingcart-query</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ShoppingCart-Query</name>
+	<name>shoppingcart-query</name>
 	<description>this is shopping query service </description>
 	<properties>
 		<java.version>17</java.version>
