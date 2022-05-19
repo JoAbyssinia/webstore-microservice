@@ -49,11 +49,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         if (isFoundShoppingCartQuery.isPresent()) {
 
-//            ShoppingCartQuery shoppingCartQuery = isFoundShoppingCartQuery.get();
+            ShoppingCartQuery shoppingCartQuery = isFoundShoppingCartQuery.get();
 
-            ShoppingCartQuery shoppingCartQuery = new ShoppingCartQuery();
-            shoppingCartQuery.setId(null);
-            shoppingCartQuery.setCartNumber(shoppingCartQueryRequestDTO.getCartNumber());
+//            ShoppingCartQuery shoppingCartQuery = new ShoppingCartQuery();
+//            shoppingCartQuery.;
+//            shoppingCartQuery.setCartNumber(shoppingCartQueryRequestDTO.getCartNumber());
 
             List<ProductLine> productLines = new ArrayList<>();
             shoppingCartQueryRequestDTO.getProductLines().forEach(productLine -> {

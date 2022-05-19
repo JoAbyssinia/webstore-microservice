@@ -21,35 +21,35 @@ public class ProductComponent implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        HttpEntity<Customer> request = new HttpEntity<>(requestHeaders);
-        Gson gson = new Gson();
-        String productServerUrl = "http://localhost:8080/api/v1/product/";
-
-
-        System.out.println("##### REQUESTING PRODUCT \n #####");
-
-        System.out.println("##### ----- POST /api/v1/product ----- ##### ");
-
-		Product product1 = Product.builder()
-                .productNumber("5")
-                .name("Apple 5")
-                .price(1000.00)
-                .description("Product by Apple Inc.")
-                .quantity(1000)
-                .build();
-		HttpEntity<Product> request1 = new HttpEntity<>(product1,requestHeaders);
-		ResponseEntity<String> productResult1 = restTemplate.exchange(
-				productServerUrl,
-				HttpMethod.POST, request1, String.class);
-
-        ProductResponseDTO productCreatedResultReturn = gson.fromJson(productResult1.getBody(), ProductResponseDTO.class);
-		System.out.println("********************** Product Created **********************");
-
-
-		System.out.println(productCreatedResultReturn.toString());
-		System.out.println();
+//        HttpHeaders requestHeaders = new HttpHeaders();
+//        requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+//        HttpEntity<Customer> request = new HttpEntity<>(requestHeaders);
+//        Gson gson = new Gson();
+//        String productServerUrl = "http://localhost:8080/api/v1/product/";
+//
+//
+//        System.out.println("##### REQUESTING PRODUCT \n #####");
+//
+//        System.out.println("##### ----- POST /api/v1/product ----- ##### ");
+//
+//		Product product1 = Product.builder()
+//                .productNumber("5")
+//                .name("Apple 5")
+//                .price(1000.00)
+//                .description("Product by Apple Inc.")
+//                .quantity(1000)
+//                .build();
+//		HttpEntity<Product> request1 = new HttpEntity<>(product1,requestHeaders);
+//		ResponseEntity<String> productResult1 = restTemplate.exchange(
+//				productServerUrl,
+//				HttpMethod.POST, request1, String.class);
+//
+//        ProductResponseDTO productCreatedResultReturn = gson.fromJson(productResult1.getBody(), ProductResponseDTO.class);
+//		System.out.println("********************** Product Created **********************");
+//
+//
+//		System.out.println(productCreatedResultReturn.toString());
+//		System.out.println();
 //
 //
 //
