@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>edu.miu</groupId>
-	<artifactId>product-service</artifactId>
+	<artifactId>product-service-replica-two</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>product-service</name>
+	<name>product-service-replica-two</name>
 	<description>This is product service </description>
 	<properties>
 		<java.version>11</java.version>
