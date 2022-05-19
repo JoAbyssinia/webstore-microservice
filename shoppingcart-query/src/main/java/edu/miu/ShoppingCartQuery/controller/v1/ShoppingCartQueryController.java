@@ -34,14 +34,13 @@ public class ShoppingCartQueryController {
         return new ResponseEntity<>(shoppingCartService.getAllShoppingCartQuery(), HttpStatus.OK);
     }
 
-    @GetMapping("/chackout/{cartNumber}")
-    ResponseEntity<?> checkoutShoppingCart(@PathVariable String cartNumber ){
+    @GetMapping("/chackout/{cartNumber}/{customerId}")
+    ResponseEntity<?> checkoutShoppingCart(@PathVariable String cartNumber, @PathVariable String customerId) {
 
+        shoppingCartService.getShoppingCartQueryCheckout(cartNumber, customerId);
 
-
-        return new ResponseEntity<>("your shopping cart is ordered....",HttpStatus.OK);
+        return new ResponseEntity<>("your shopping cart is ordered....", HttpStatus.OK);
     }
-
 
 
 }

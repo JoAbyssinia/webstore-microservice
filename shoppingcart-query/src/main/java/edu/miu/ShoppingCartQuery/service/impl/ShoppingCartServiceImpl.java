@@ -1,11 +1,15 @@
 package edu.miu.ShoppingCartQuery.service.impl;
 
-import edu.miu.ShoppingCartQuery.dto.ProductDTO;
+import edu.miu.ShoppingCartQuery.dto.request.ProductDTO;
+import edu.miu.ShoppingCartQuery.dto.request.OrderRequestDTO;
+import edu.miu.ShoppingCartQuery.dto.request.ProductLineDTO;
 import edu.miu.ShoppingCartQuery.dto.request.ShoppingCartQueryRequestDTO;
+import edu.miu.ShoppingCartQuery.dto.request.ShoppingCartRequestDTO;
 import edu.miu.ShoppingCartQuery.dto.responce.ShoppingCartQueryResponseDTO;
 import edu.miu.ShoppingCartQuery.entity.Product;
 import edu.miu.ShoppingCartQuery.entity.ProductLine;
 import edu.miu.ShoppingCartQuery.entity.ShoppingCartQuery;
+import edu.miu.ShoppingCartQuery.feignClient.OrderFeignInterface;
 import edu.miu.ShoppingCartQuery.repository.ShoppingCartQueryRepository;
 import edu.miu.ShoppingCartQuery.service.ShoppingCartService;
 import edu.miu.ShoppingCartQuery.util.ShoppingCartQueryUtils;
@@ -19,9 +23,11 @@ import java.util.Optional;
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private final ShoppingCartQueryRepository shoppingCartQueryRepository;
+    private final OrderFeignInterface orderFeignInterface;
 
-    public ShoppingCartServiceImpl(ShoppingCartQueryRepository shoppingCartQueryRepository) {
+    public ShoppingCartServiceImpl(ShoppingCartQueryRepository shoppingCartQueryRepository, OrderFeignInterface orderFeignInterface) {
         this.shoppingCartQueryRepository = shoppingCartQueryRepository;
+        this.orderFeignInterface = orderFeignInterface;
     }
 
 
@@ -64,6 +70,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         return null;
     }
+
 
 
     @Override
@@ -159,7 +166,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public String getShoppingCartQuery(String cartNumber, String customerId) {
+    public String getShoppingCartQueryCheckout(String cartNumber, String customerId) {
         Optional<ShoppingCartQuery> isFoundShoppingCartQuery =
                 shoppingCartQueryRepository.findByCartNumber(cartNumber);
 
@@ -167,6 +174,37 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
             ShoppingCartQuery shoppingCartQuery = isFoundShoppingCartQuery.get();
 
+//            create order request
+            OrderRequestDTO orderRequestDTO = new OrderRequestDTO();
+//            add customer ID
+            orderRequestDTO.setCustomerID(customerId);
+
+            List<ProductLineDTO> productLines = new ArrayList<>();
+            shoppingCartQuery.getProductLines().forEach(productLine -> {
+
+                ProductLineDTO line = new ProductLineDTO();
+
+                ProductDTO productDTO = ProductDTO.builder()
+                        .description(productLine.getProduct().getDescription())
+                        .name(productLine.getProduct().getName())
+                        .price(productLine.getProduct().getPrice())
+                        .productNumber(productLine.getProduct().getProductNumber())
+                        .build();
+                line.setProduct(productDTO);
+                line.setQuantity(productLine.getQuantity());
+
+            productLines.add(line);
+
+            });
+
+            ShoppingCartRequestDTO shoppingCartRequestDTO = new ShoppingCartRequestDTO();
+            shoppingCartRequestDTO.setProductLines(productLines);
+            shoppingCartRequestDTO.setCartNumber(shoppingCartQuery.getCartNumber());
+
+
+            orderRequestDTO.setShoppingCart(shoppingCartRequestDTO);
+
+            orderFeignInterface.checkout(orderRequestDTO);
 
         }
         return null;

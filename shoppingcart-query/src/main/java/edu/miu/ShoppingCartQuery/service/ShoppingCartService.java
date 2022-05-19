@@ -1,7 +1,7 @@
 package edu.miu.ShoppingCartQuery.service;
 
 
-import edu.miu.ShoppingCartQuery.dto.ProductDTO;
+import edu.miu.ShoppingCartQuery.dto.request.ProductDTO;
 import edu.miu.ShoppingCartQuery.dto.request.ShoppingCartQueryRequestDTO;
 import edu.miu.ShoppingCartQuery.dto.responce.ShoppingCartQueryResponseDTO;
 
@@ -24,7 +24,7 @@ public interface ShoppingCartService {
 
     List<ShoppingCartQueryResponseDTO> getAllShoppingCartQuery();
 
-    String getShoppingCartQuery(String cartNumber, String customerId);
+    String getShoppingCartQueryCheckout(String cartNumber, String customerId);
 
 
 
