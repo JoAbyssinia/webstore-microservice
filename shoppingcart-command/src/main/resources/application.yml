@@ -1,16 +1,16 @@
-server:
-  port: 8095
-
-
-logging:
-  file:
-    name: /Users/bijayshrestha/elk-logs/shoppingcart-command-log
-
-spring:
-  kafka:
-    bootstrap-servers:
-      - localhost:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#server:
+#  port: 8095
+#
+#
+#logging:
+#  file:
+#    name: /Users/bijayshrestha/elk-logs/shoppingcart-command-log
+#
+#spring:
+#  kafka:
+#    bootstrap-servers:
+#      - localhost:9092
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 

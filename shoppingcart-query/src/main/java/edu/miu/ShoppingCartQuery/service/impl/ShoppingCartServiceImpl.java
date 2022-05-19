@@ -35,26 +35,39 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartQueryResponseDTO addProduct(String cartNumber, ProductDTO productDTO, Integer quantity) {
+    public ShoppingCartQueryResponseDTO addProduct(ShoppingCartQueryRequestDTO shoppingCartQueryRequestDTO) {
 
-        Optional<ShoppingCartQuery> isFoundShoppingCartQuery = shoppingCartQueryRepository.findByCartNumber(cartNumber);
+        Optional<ShoppingCartQuery> isFoundShoppingCartQuery =
+                shoppingCartQueryRepository.findByCartNumber(shoppingCartQueryRequestDTO.getCartNumber());
 
         if (isFoundShoppingCartQuery.isPresent()) {
 
-            ShoppingCartQuery shoppingCartQuery = isFoundShoppingCartQuery.get();
+//            ShoppingCartQuery shoppingCartQuery = isFoundShoppingCartQuery.get();
 
-            Product product = Product.builder()
-                    .description(productDTO.getDescription())
-                    .name(productDTO.getName())
-                    .price(productDTO.getPrice())
-                    .productNumber(productDTO.getProductNumber())
-                    .build();
-            ProductLine productLine = ProductLine.builder()
-                    .product(product)
-                    .quantity(quantity)
-                    .build();
-            shoppingCartQuery.getProductLines().add(productLine);
+            ShoppingCartQuery shoppingCartQuery = new ShoppingCartQuery();
+            shoppingCartQuery.setId(null);
+            shoppingCartQuery.setCartNumber(shoppingCartQueryRequestDTO.getCartNumber());
 
+            List<ProductLine>  productLines = new ArrayList<>();
+            shoppingCartQueryRequestDTO.getProductLines().forEach(productLine -> {
+                ProductLine line = new ProductLine();
+                line.setProduct(productLine.getProduct());
+                line.setQuantity(productLine.getQuantity());
+                productLines.add(line);
+            });
+            shoppingCartQuery.setProductLines(productLines);
+//
+//            Product product = Product.builder()
+//                    .description(productDTO.getDescription())
+//                    .name(productDTO.getName())
+//                    .price(productDTO.getPrice())
+//                    .productNumber(productDTO.getProductNumber())
+//                    .build();
+//            ProductLine productLine = ProductLine.builder()
+//                    .product(product)
+//                    .quantity(quantity)
+//                    .build();
+//            shoppingCartQuery.getProductLines().add(productLine);
             shoppingCartQueryRepository.save(shoppingCartQuery);
 
             return ShoppingCartQueryUtils.parseShoppingCartQueryToShoppingCartQueryResponseDTO(shoppingCartQuery);
@@ -87,12 +100,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                     return;
                 }
             });
-
             shoppingCartQueryRepository.save(shoppingCartQuery);
-
             return ShoppingCartQueryUtils.parseShoppingCartQueryToShoppingCartQueryResponseDTO(shoppingCartQuery);
         }
-
         return null;
     }
 

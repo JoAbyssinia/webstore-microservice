@@ -10,9 +10,11 @@ import edu.miu.shoppingcartcommand.error.GenericShoppingCartError;
 import edu.miu.shoppingcartcommand.feignClient.ProductFeignInterface;
 import edu.miu.shoppingcartcommand.feignClient.StockFeignInterface;
 import edu.miu.shoppingcartcommand.integration.KafkaMessage;
+import edu.miu.shoppingcartcommand.kafka.ShoppingCartEvent;
 import edu.miu.shoppingcartcommand.repository.ShoppingCartRepository;
 import edu.miu.shoppingcartcommand.service.ShoppingCartService;
 import edu.miu.shoppingcartcommand.utils.ShoppingCartUtils;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -31,16 +33,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ProductFeignInterface productFeignInterface;
     private final StockFeignInterface stockFeignInterface;
 
-    private final KafkaMessage kafkaMessage;
+//    private final KafkaMessage kafkaMessage;
+
+    private final KafkaTemplate<String, ShoppingCartEvent> kafkaTemplate;
 
     public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository,
                                    ProductFeignInterface productFeignInterface,
                                    StockFeignInterface stockFeignInterface,
-                                   KafkaMessage kafkaMessage) {
+                                   KafkaTemplate<String, ShoppingCartEvent> kafkaTemplate) {
         this.shoppingCartRepository = shoppingCartRepository;
         this.productFeignInterface = productFeignInterface;
         this.stockFeignInterface = stockFeignInterface;
-        this.kafkaMessage = kafkaMessage;
+//        this.kafkaMessage = kafkaMessage;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
@@ -52,7 +57,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         if (productFeignResponse.isPresent()) {
             Optional<StockResponseFeignDTO> stockFeignResponse = Optional.ofNullable(
                     stockFeignInterface.getStock(shoppingCartRequestDTO.getProductNumber()));
+
             if (stockFeignResponse.get().getQuantity() >= shoppingCartRequestDTO.getQuantity()) {
+
                 ProductLine productLine = parseProductResponseFeignDTOToProductLine(
                         productFeignResponse.get(), shoppingCartRequestDTO.getQuantity());
                 shoppingCart.getProductLines().add(productLine);
@@ -61,8 +68,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
                 ShoppingCartResponseDTO shoppingCartResponseDTO =
                         ShoppingCartUtils.parseShoppingCartToShoppingCartResponseDTO(shoppingCart,
-                        shoppingCartRequestDTO.getQuantity());
-                kafkaMessage.sendMessage("create-cart", shoppingCartResponseDTO);
+                                shoppingCartRequestDTO.getQuantity());
+
+                kafkaTemplate.send("shoppigcarttopic",
+                        new ShoppingCartEvent("ADD", shoppingCartResponseDTO, "12"));
 
                 return shoppingCartResponseDTO;
             } else {
@@ -93,8 +102,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                         productFeignResponse.get(), shoppingCartRequestDTO.getQuantity());
                 isShoppingCartExist.get().getProductLines().add(productLine);
                 shoppingCartRepository.save(isShoppingCartExist.get());
-                return ShoppingCartUtils.parseShoppingCartToShoppingCartResponseDTO(isShoppingCartExist.get(),
-                        shoppingCartRequestDTO.getQuantity());
+
+
+                ShoppingCartResponseDTO shoppingCartResponseDTO =
+                        ShoppingCartUtils.parseShoppingCartToShoppingCartResponseDTO(isShoppingCartExist.get(),
+                                shoppingCartRequestDTO.getQuantity());
+
+//                kafkaMessage.sendMessage("add-product", shoppingCartResponseDTO);
+
+                kafkaTemplate.send("shoppigcarttopic",
+                        new ShoppingCartEvent("ADD-PRODUCT",
+                                shoppingCartResponseDTO, "0"));
+
+
+                return shoppingCartResponseDTO;
             } else {
                 throw new GenericShoppingCartError("The requested quantity is not available. Only " +
                         stockFeignResponse.get().getQuantity() + "left!");
@@ -107,7 +128,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public ProductResponseDTO removeProduct(String cartNumber, ProductRequestDTO productRequestDTO) throws GenericShoppingCartError {
         boolean found = false;
         ProductResponseDTO productResponseDTO = new ProductResponseDTO();
-                Optional<ShoppingCart> isShoppingCartExist = shoppingCartRepository.findByCartNumber(cartNumber);
+        Optional<ShoppingCart> isShoppingCartExist = shoppingCartRepository.findByCartNumber(cartNumber);
         if (isShoppingCartExist.isEmpty()) {
             throw new GenericShoppingCartError("Shopping Cart Not Available!");
         }
@@ -121,10 +142,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 break;
             }
         }
-        if (found){
+        if (found) {
+
             shoppingCartRepository.save(isShoppingCartExist.get());
+
+            ShoppingCartResponseDTO shoppingCartResponseDTO =
+                    ShoppingCartResponseDTO.builder().build();
+
+            kafkaTemplate.send("shoppigcarttopic",
+                    new ShoppingCartEvent("REMOVE-PRODUCT", shoppingCartResponseDTO, "0"));
+
+
             return productResponseDTO;
-        }else{
+        } else {
             throw new GenericShoppingCartError("Product with id: " + productRequestDTO.getProductNumber() + " not found!");
         }
     }
@@ -143,10 +173,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 productFeignInterface.getProduct(
                         productChangeQuantityRequestDTO.getProductNumber()));
 
-        if(productFeignResponse.isPresent()) {
+        if (productFeignResponse.isPresent()) {
             List<ProductLine> productLineList = isShoppingCartExist.get().getProductLines();
-            for(ProductLine productLine: productLineList){
-                if (productLine.getProduct().getProductNumber().equals(productChangeQuantityRequestDTO.getProductNumber())){
+            for (ProductLine productLine : productLineList) {
+                if (productLine.getProduct().getProductNumber().equals(productChangeQuantityRequestDTO.getProductNumber())) {
                     Optional<StockResponseFeignDTO> stockFeignResponse = Optional.ofNullable(
                             stockFeignInterface.getStock(productChangeQuantityRequestDTO.getProductNumber()));
                     if (stockFeignResponse.get().getQuantity() >= productChangeQuantityRequestDTO.getQuantity()) {
@@ -158,7 +188,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                                 .quantity(productLine.getQuantity())
                                 .build();
                         shoppingCartRepository.save(isShoppingCartExist.get());
-                    }else {
+                    } else {
                         try {
                             throw new GenericShoppingCartError("The requested quantity is not available. Only " +
                                     stockFeignResponse.get().getQuantity() + "left!");
@@ -169,10 +199,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                     break;
                 }
             }
-              productChangeQuantityResponseDTO.setCartNumber(cartNumber);
-              productChangeQuantityResponseDTO.setProductResponseFeignDTO(productResponseFeignDTO);
-                return productChangeQuantityResponseDTO;
-            }else{
+            productChangeQuantityResponseDTO.setCartNumber(cartNumber);
+            productChangeQuantityResponseDTO.setProductResponseFeignDTO(productResponseFeignDTO);
+            return productChangeQuantityResponseDTO;
+        } else {
             throw new GenericShoppingCartError("Product with id: " + productChangeQuantityRequestDTO.getProductNumber() + " not found!");
         }
     }

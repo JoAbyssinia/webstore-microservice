@@ -7,15 +7,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class KafkaMessageImpl implements KafkaMessage {
-
-    private final KafkaTemplate<String, ShoppingCartResponseDTO> kafkaTemplate;
-
-    public KafkaMessageImpl(KafkaTemplate<String, ShoppingCartResponseDTO> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
-
-    @Override
-    public void sendMessage(String topic, ShoppingCartResponseDTO shoppingCartResponseDTO) {
-        kafkaTemplate.send(topic, shoppingCartResponseDTO);
-    }
+//
+//    private final KafkaTemplate<String, ShoppingCartResponseDTO> kafkaTemplate;
+//
+//    public KafkaMessageImpl(KafkaTemplate<String, ShoppingCartResponseDTO> kafkaTemplate) {
+//        this.kafkaTemplate = kafkaTemplate;
+//    }
+//
+//    @Override
+//    public void sendMessage(String topic, ShoppingCartResponseDTO shoppingCartResponseDTO) {
+//        kafkaTemplate.send(topic, shoppingCartResponseDTO);
+//    }
 }

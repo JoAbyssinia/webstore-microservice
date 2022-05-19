@@ -12,7 +12,7 @@ public interface ShoppingCartService {
     ShoppingCartQueryResponseDTO addShoppingCartQuery(ShoppingCartQueryRequestDTO shoppingCartQueryRequestDTO);
 
 
-    ShoppingCartQueryResponseDTO addProduct(String cartNumber, ProductDTO productDTO,Integer quantity);
+    ShoppingCartQueryResponseDTO addProduct(ShoppingCartQueryRequestDTO shoppingCartQueryRequestDTO);
 
     ShoppingCartQueryResponseDTO removeProduct(String cartNumber, ProductDTO productDTO);
 
