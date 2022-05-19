@@ -12,7 +12,6 @@ import org.springframework.kafka.annotation.EnableKafkaStreams;
 @EnableDiscoveryClient
 @EnableFeignClients
 @EnableKafka
-@EnableKafkaStreams
 public class ShoppingcartCommandApplication {
 
 	public static void main(String[] args) {
