@@ -34,10 +34,29 @@ public class ShoppingCartUtils {
     }
 
     public static ShoppingCartResponseDTO
-    parseShoppingCartToShoppingCartResponseDTO(ShoppingCart shoppingCart, Integer requestedQuantity) {
-//        ShoppingCartResponseDTO shoppingCartResponseDTO = new ShoppingCartResponseDTO();
+    parseShoppingCartToShoppingCartResponseDTO(ShoppingCart shoppingCart) {
+        List<ProductLineResponseDTO> productLineResponseDTOS = new ArrayList<>();
+        for (ProductLine productLine :
+                shoppingCart.getProductLines()) {
+            ProductLineResponseDTO productLineResponseDTO = new ProductLineResponseDTO();
+            ProductResponseDTO productResponseDTO = new ProductResponseDTO();
+            productResponseDTO.setProductNumber(productLine.getProduct().getProductNumber());
+            productResponseDTO.setName(productLine.getProduct().getName());
+            productResponseDTO.setPrice(productLine.getProduct().getPrice());
+            productResponseDTO.setDescription(productLine.getProduct().getDescription());
+            productLineResponseDTO.setProduct(productResponseDTO);
+            productLineResponseDTO.setQuantity(productLine.getQuantity());
+            productLineResponseDTOS.add(productLineResponseDTO);
+        }
 
-//        shoppingCartResponseDTO.setCartNumber(shoppingCart.getCartNumber());
+        return ShoppingCartResponseDTO.builder()
+                .cartNumber(shoppingCart.getCartNumber())
+                .productLineResponseDTOList(productLineResponseDTOS)
+                .build();
+    }
+
+    public static ShoppingCartResponseDTO
+    parseShoppingCartToShoppingCartResponseDTOForAddCart(ShoppingCart shoppingCart, int requestedQuantity) {
         List<ProductLineResponseDTO> productLineResponseDTOS = new ArrayList<>();
         for (ProductLine productLine :
                 shoppingCart.getProductLines()) {
@@ -51,7 +70,6 @@ public class ShoppingCartUtils {
             productLineResponseDTO.setQuantity(requestedQuantity);
             productLineResponseDTOS.add(productLineResponseDTO);
         }
-//        shoppingCartResponseDTO.setProductLineResponseDTOList(productLineResponseDTOS);
 
         return ShoppingCartResponseDTO.builder()
                 .cartNumber(shoppingCart.getCartNumber())

@@ -67,8 +67,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 shoppingCart = shoppingCartRepository.save(shoppingCart);
 
                 ShoppingCartResponseDTO shoppingCartResponseDTO =
-                        ShoppingCartUtils.parseShoppingCartToShoppingCartResponseDTO(shoppingCart,
-                                shoppingCartRequestDTO.getQuantity());
+                        ShoppingCartUtils.parseShoppingCartToShoppingCartResponseDTOForAddCart(shoppingCart, shoppingCartRequestDTO.getQuantity());
 
                 kafkaTemplate.send("shoppigcarttopic",
                         new ShoppingCartEvent("ADD", shoppingCartResponseDTO, "12"));
@@ -105,8 +104,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
 
                 ShoppingCartResponseDTO shoppingCartResponseDTO =
-                        ShoppingCartUtils.parseShoppingCartToShoppingCartResponseDTO(isShoppingCartExist.get(),
-                                shoppingCartRequestDTO.getQuantity());
+                        ShoppingCartUtils.parseShoppingCartToShoppingCartResponseDTO(isShoppingCartExist.get());
 
 //                kafkaMessage.sendMessage("add-product", shoppingCartResponseDTO);
 
