@@ -4,3 +4,8 @@ server:
 logging:
   file:
     name: /Users/bijayshrestha/elk-logs/stock-log
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true

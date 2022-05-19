@@ -4,9 +4,7 @@ import edu.miu.orderservice.dto.request.ShoppingCartRequestDTO;
 import edu.miu.orderservice.entity.Order;
 import edu.miu.orderservice.entity.OrderLine;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static edu.miu.orderservice.util.RandomNumberGenerator.getRandomNumbers;
 
@@ -27,5 +25,13 @@ public class OrderUtils {
         order.setCustomerID(customerID);
         order.setOrderStatus('N');
         return order;
+    }
+
+    public static Map<String, Integer> getProductQuantity(Order order){
+        Map<String, Integer> productQuantityMap=new HashMap<>();
+        order.getOrderLine().forEach(orderLine->{
+            productQuantityMap.put(orderLine.getProduct().getProductNumber(),orderLine.getQuantity());
+        });
+        return productQuantityMap;
     }
 }

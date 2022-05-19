@@ -5,6 +5,7 @@ import edu.miu.productservice.dto.request.ProductRequestDTO;
 import edu.miu.productservice.dto.response.ProductResponseDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductService {
 

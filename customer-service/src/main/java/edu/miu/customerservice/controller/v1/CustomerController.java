@@ -1,9 +1,11 @@
 package edu.miu.customerservice.controller.v1;
 
 import edu.miu.customerservice.dto.request.CustomerRequestDTO;
+import edu.miu.customerservice.dto.request.EmailRequestDTO;
 import edu.miu.customerservice.dto.response.CustomerResponseDTO;
 import edu.miu.customerservice.error.GenericCustomerError;
 import edu.miu.customerservice.service.CustomerService;
+import edu.miu.customerservice.service.EmailSenderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +18,11 @@ import java.util.Optional;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final EmailSenderService emailSenderService;
 
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, EmailSenderService emailSenderService) {
         this.customerService = customerService;
+        this.emailSenderService = emailSenderService;
     }
 
     @PostMapping
@@ -81,6 +85,18 @@ public class CustomerController {
         return new ResponseEntity<>(
                 customerResponseDTOList.get(),
                 HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/email")
+    public ResponseEntity<?> sendEmail(@RequestBody EmailRequestDTO emailRequestDTO) {
+        String message="";
+        try{
+            message=emailSenderService.sendEmail(emailRequestDTO);
+            return ResponseEntity.ok(message);
+        }catch (Exception ex){
+            return new ResponseEntity<>(getGenericCustomerError("Sorry, email not sent"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public GenericCustomerError getGenericCustomerError(String message){
