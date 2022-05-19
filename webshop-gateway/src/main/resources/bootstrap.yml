@@ -31,5 +31,9 @@ spring:
           uri: lb://order-service
           predicates:
             - Path=/api/v1/order-service/**
+        - id: webshop-client
+          uri: lb://webshop-client
+          predicates:
+            - Path=/api/v1/webshop/client**
 
 
