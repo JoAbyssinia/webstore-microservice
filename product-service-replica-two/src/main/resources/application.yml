@@ -1,0 +1,6 @@
+server:
+  port: 8093
+
+logging:
+  file:
+    name: /Users/bijayshrestha/elk-logs/product-log
