@@ -22,6 +22,7 @@ public class ProductUtils {
                 .productNumber(product.getProductNumber())
                 .name(product.getName())
                 .description(product.getDescription())
+                .price(product.getPrice())
                 .build();
     }
 
