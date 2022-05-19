@@ -13,7 +13,6 @@ import java.util.Random;
 public class CustomerUtils {
 
     public static Customer parseCustomerRequestDTOToCustomer(CustomerRequestDTO customerDTO){
-        //TODO: MAKE INLINE VARIABLE AFTER SUCCESSFUL DEBUG
         Customer customer = new Customer(null,
                 generateCustomerUniqueID(),
                 customerDTO.getFirstName(),

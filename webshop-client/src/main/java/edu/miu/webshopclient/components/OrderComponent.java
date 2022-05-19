@@ -20,6 +20,9 @@ public class OrderComponent implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        
+        /**
+
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<Customer> request = new HttpEntity<>(requestHeaders);
@@ -50,5 +53,8 @@ public class OrderComponent implements ApplicationRunner {
 
         System.out.println(orderResult.getBody());
         System.out.println("############# CONFIRMED ORDER SUCCESSFULLY #############");
+
+
+        **/
     }
 }
