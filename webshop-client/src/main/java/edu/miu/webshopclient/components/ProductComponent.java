@@ -30,7 +30,8 @@ public class ProductComponent implements ApplicationRunner {
 
         System.out.println("##### REQUESTING PRODUCT \n #####");
 
-        System.out.println("##### ----- POST /api/v1/product ----- ##### ");
+        System.out.println("***** +++++ ADDING  PRODUCT +++++ *****");
+        System.out.println("##### ----- POST /api/v1/product ----- #####");
 
 		Product product1 = Product.builder()
                 .productNumber("5")
@@ -45,19 +46,15 @@ public class ProductComponent implements ApplicationRunner {
 				HttpMethod.POST, request1, String.class);
 
         ProductResponseDTO productCreatedResultReturn = gson.fromJson(productResult1.getBody(), ProductResponseDTO.class);
-		System.out.println("********************** Product Created **********************");
+
+        System.out.println("############# PRODUCT CREATED SUCCESSFULLY #############");
 
 
 		System.out.println(productCreatedResultReturn.toString());
 		System.out.println();
-//
-//
-//
-//
-//
-//
-//
-////		********************** Update Product **********************
+
+        System.out.println("***** +++++ UPDATING  PRODUCT +++++ *****");
+        System.out.println("##### ----- PUT /api/v1/product ----- ##### ");
 //
 //		System.out.println("********************** Update Product **********************");
 //
