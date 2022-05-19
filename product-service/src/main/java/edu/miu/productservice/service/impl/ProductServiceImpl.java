@@ -62,7 +62,6 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDTO deleteProduct(String productNumber) {
         Optional<Product> isProductExist = productRepository.findByProductNumber(productNumber);
 
-//        isProductExist.ifPresent(productRepository::delete).;
 
         if (isProductExist.isPresent()){
             Product product = isProductExist.get();
@@ -78,12 +77,15 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductResponseDTO> getAllProduct() {
         List<ProductResponseDTO> productResponseDTOS = new ArrayList<>();
         productRepository.findAll().forEach(product -> {
+            StockResponseDTO stockResponseDTO = stockInterface.getStock(product.getProductNumber());
             productResponseDTOS.add(
+
                     ProductResponseDTO.builder()
                             .productNumber(product.getProductNumber())
                             .name(product.getName())
                             .price(product.getPrice())
                             .description(product.getDescription())
+                            .quantity(stockResponseDTO.getQuantity())
                             .build());
         });
 

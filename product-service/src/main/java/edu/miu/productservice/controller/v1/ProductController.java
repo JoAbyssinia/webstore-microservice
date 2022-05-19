@@ -34,6 +34,7 @@ public class ProductController {
 
     @GetMapping("/{productNumber}")
     ResponseEntity<?> getProduct(@PathVariable String productNumber) {
+
         ProductResponseDTO productResponseDTO = productService.getProduct(productNumber);
         if (productResponseDTO != null) {
             return new ResponseEntity<>(productResponseDTO, HttpStatus.OK);

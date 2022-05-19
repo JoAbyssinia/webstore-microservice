@@ -17,6 +17,7 @@ public class ProductUtils {
     }
 
     public static ProductResponseDTO parseProductTOProductResponseDTO(Product product) {
+
         return ProductResponseDTO.builder()
                 .productNumber(product.getProductNumber())
                 .name(product.getName())
