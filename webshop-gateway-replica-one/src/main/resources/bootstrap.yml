@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: webshop-gateway-replica-one
+  main:
+    web-application-type: reactive
+  zipkin:
+    base-url: http://localhost:8083/
+  cloud:
+    config:
+      uri:
+        - http://localhost:8000
+    gateway:
+      routes:
+        - id: customer-service
+          uri: lb://customer-service
+          predicates:
+            - Path=/api/v1/customers/**
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/v1/product/**
+        - id: stock-service
+          uri: lb://stock-service
+          predicates:
+            - Path=/api/v1/stock/**
+        - id: shoppingcart-command
+          uri: lb://shoppingcart-command
+          predicates:
+            - Path=/api/v1/shopping-cart/**
+        - id: shoppingcart-query
+          uri: lb://shoppingcart-query
+          predicates:
+            - Path=/api/v1/shopping-cart-query/**
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/v1/orders/**
+        - id: webshop-client
+          uri: lb://webshop-client
+          predicates:
+            - Path=/api/v1/webshop/client**
+
+

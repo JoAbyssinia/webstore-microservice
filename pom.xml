@@ -25,6 +25,7 @@
         <module>config-service</module>
         <module>stock-service</module>
         <module>webshop-gateway</module>
+        <module>webshop-gateway-replica-one</module>
         <module>kafka-service</module>
         <module>shoppingcart-command</module>
         <module>shoppingcart-query</module>
