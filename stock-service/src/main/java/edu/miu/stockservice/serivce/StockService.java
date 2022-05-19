@@ -4,6 +4,7 @@ import edu.miu.stockservice.dto.requestDto.StockRequestDTO;
 import edu.miu.stockservice.dto.responceDto.StockResponseDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface StockService {
 
@@ -17,5 +18,6 @@ public interface StockService {
 
     StockResponseDTO getStock(String productNumber);
 
+    Boolean updateProductStock(Map<String, Integer> productQuantityMap) throws InterruptedException;
 
 }

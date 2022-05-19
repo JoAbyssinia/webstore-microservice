@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/product")
 public class ProductController {
@@ -57,7 +59,6 @@ public class ProductController {
 
         return new ResponseEntity<>("product with this product number " + productNumber + " couldn't find",
                 HttpStatus.NOT_FOUND);
-
     }
 
 }

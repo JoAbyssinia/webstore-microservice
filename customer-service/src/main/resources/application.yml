@@ -4,3 +4,22 @@ server:
 logging:
   file:
     name: /Users/bijayshrestha/elk-logs/customer-log
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: test.applicationmiu@gmail.com
+    password: test@pplication
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+        transport:
+          protocol: smtp
+        debug: true

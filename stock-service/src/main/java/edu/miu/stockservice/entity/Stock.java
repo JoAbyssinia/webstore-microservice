@@ -19,4 +19,9 @@ public class Stock {
     private BigInteger id;
     private String productNumber;
     private Integer quantity;
+
+    public void decrementQuantity(int count) {
+        this.quantity = quantity - count;
+    }
+
 }

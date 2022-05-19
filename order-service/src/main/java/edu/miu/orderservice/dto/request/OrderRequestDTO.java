@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderRequestDTO {
-    private ShoppingCartRequestDTO shoppingCart;
     private String customerID;
+    private ShoppingCartRequestDTO shoppingCart;
 }
