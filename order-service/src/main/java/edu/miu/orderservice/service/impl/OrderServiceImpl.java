@@ -73,4 +73,9 @@ public class OrderServiceImpl implements OrderService {
             return responseEntity;
         }
     }
+
+    @Override
+    public Order getOrder(String orderNumber) {
+        return orderRepository.findByOrderNumber(orderNumber).orElse(null);
+    }
 }

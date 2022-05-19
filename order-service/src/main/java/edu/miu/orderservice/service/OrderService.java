@@ -9,4 +9,6 @@ public interface OrderService {
     Order checkoutOrder(OrderRequestDTO orderRequestDTO) throws OrderErrorType;
 
     String confirmOrder(OrderConfirmRequestDTO orderConfirmRequestDTO);
+
+    Order getOrder(String orderNumber);
 }
