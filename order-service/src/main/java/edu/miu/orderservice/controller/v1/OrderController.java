@@ -5,11 +5,11 @@ import edu.miu.orderservice.dto.request.OrderRequestDTO;
 import edu.miu.orderservice.entity.Order;
 import edu.miu.orderservice.error.OrderErrorType;
 import edu.miu.orderservice.service.OrderService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -42,5 +42,17 @@ public class OrderController {
         }
         return ResponseEntity.ok(message);
     }
+
+    @GetMapping("/{orderNumber}")
+    public ResponseEntity<?> getOrder(@PathVariable("orderNumber") String orderNumber) {
+        Order order=orderService.getOrder(orderNumber);
+        if(Objects.isNull(order)){
+            return new ResponseEntity<>(
+                    "Order with Order Number : " + orderNumber + " Not Found",
+                    HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(order);
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package edu.miu.webshopclient.components;
 
 import com.google.gson.Gson;
+import edu.miu.webshopclient.constant.APIConstant;
 import edu.miu.webshopclient.entity.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -13,33 +14,34 @@ import java.util.Arrays;
 
 @Component
 public class CustomerComponent implements ApplicationRunner {
+
+
     @Autowired
     private RestOperations restTemplate;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
+        /**
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<Customer> request = new HttpEntity<>(requestHeaders);
         Gson gson = new Gson();
-        String customerServerUrl = "http://localhost:8090/api/v1/customers/";
 
-        /**
         String customerID = "11111";
 
-        System.out.println("##### REQUESTING CUSTOMER  #####");
+        System.out.println("##### REQUESTING CUSTOMER COMPONENT #####");
         System.out.println();
 
         System.out.println("##### ----- GET /api/v1/customers/{customerID} ----- ##### ");
 
 
-        ResponseEntity<String> customerAsString = restTemplate.exchange(
-                customerServerUrl+customerID, HttpMethod.GET, request, String.class);
+        ResponseEntity<String> customerResponse = restTemplate.exchange(
+                APIConstant.CUSTOMER_API +customerID, HttpMethod.GET, request, String.class);
 
-        if(customerAsString != null){
-            Customer dto = gson.fromJson(customerAsString.getBody(), Customer.class);
+        if(customerResponse != null){
+            Customer dto = gson.fromJson(customerResponse.getBody(), Customer.class);
             System.out.println(dto.toString());
         }
         System.out.println();
@@ -60,12 +62,14 @@ public class CustomerComponent implements ApplicationRunner {
         HttpEntity<?> customerHttpEntity = new HttpEntity<>(sampleCustomer,requestHeaders);
 
         ResponseEntity<String> customer = restTemplate.exchange(
-                customerServerUrl,
+                APIConstant.CUSTOMER_API,
                 HttpMethod.POST, customerHttpEntity, String.class);
 
         Customer customerCreatedResult = gson.fromJson(customer.getBody(), Customer.class);
         System.out.println("############# CUSTOMER CREATED SUCCESSFULLY #############");
         System.out.println(customerCreatedResult.toString());
-        **/
+
+         **/
     }
+
 }
