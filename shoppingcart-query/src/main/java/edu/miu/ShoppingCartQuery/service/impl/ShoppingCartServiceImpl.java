@@ -48,7 +48,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             shoppingCartQuery.setId(null);
             shoppingCartQuery.setCartNumber(shoppingCartQueryRequestDTO.getCartNumber());
 
-            List<ProductLine>  productLines = new ArrayList<>();
+            List<ProductLine> productLines = new ArrayList<>();
             shoppingCartQueryRequestDTO.getProductLines().forEach(productLine -> {
                 ProductLine line = new ProductLine();
                 line.setProduct(productLine.getProduct());
@@ -56,18 +56,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 productLines.add(line);
             });
             shoppingCartQuery.setProductLines(productLines);
-//
-//            Product product = Product.builder()
-//                    .description(productDTO.getDescription())
-//                    .name(productDTO.getName())
-//                    .price(productDTO.getPrice())
-//                    .productNumber(productDTO.getProductNumber())
-//                    .build();
-//            ProductLine productLine = ProductLine.builder()
-//                    .product(product)
-//                    .quantity(quantity)
-//                    .build();
-//            shoppingCartQuery.getProductLines().add(productLine);
             shoppingCartQueryRepository.save(shoppingCartQuery);
 
             return ShoppingCartQueryUtils.parseShoppingCartQueryToShoppingCartQueryResponseDTO(shoppingCartQuery);
@@ -166,8 +154,21 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCartQueryRepository.findAll().forEach(shoppingCartQuery -> {
             shoppingCartQueryResponseDTOS.add(
                     ShoppingCartQueryUtils.parseShoppingCartQueryToShoppingCartQueryResponseDTO(shoppingCartQuery));
-
         });
         return shoppingCartQueryResponseDTOS;
+    }
+
+    @Override
+    public String getShoppingCartQuery(String cartNumber, String customerId) {
+        Optional<ShoppingCartQuery> isFoundShoppingCartQuery =
+                shoppingCartQueryRepository.findByCartNumber(cartNumber);
+
+        if (isFoundShoppingCartQuery.isPresent()) {
+
+            ShoppingCartQuery shoppingCartQuery = isFoundShoppingCartQuery.get();
+
+
+        }
+        return null;
     }
 }

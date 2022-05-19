@@ -24,5 +24,8 @@ public interface ShoppingCartService {
 
     List<ShoppingCartQueryResponseDTO> getAllShoppingCartQuery();
 
+    String getShoppingCartQuery(String cartNumber, String customerId);
+
+
 
 }
