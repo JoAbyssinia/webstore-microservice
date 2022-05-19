@@ -35,7 +35,7 @@ public class ShoppingCartQueryController {
         return new ResponseEntity<>(shoppingCartService.getAllShoppingCartQuery(), HttpStatus.OK);
     }
 
-    @GetMapping("/chackout/{cartNumber}/{customerId}")
+    @GetMapping("/checkout/{cartNumber}/{customerId}")
     ResponseEntity<?> checkoutShoppingCart(@PathVariable String cartNumber, @PathVariable String customerId) {
 
          String order = shoppingCartService.getShoppingCartQueryCheckout(cartNumber, customerId);
