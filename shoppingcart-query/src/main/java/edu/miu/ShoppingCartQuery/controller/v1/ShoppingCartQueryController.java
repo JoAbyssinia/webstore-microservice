@@ -2,6 +2,7 @@ package edu.miu.ShoppingCartQuery.controller.v1;
 
 
 import edu.miu.ShoppingCartQuery.dto.responce.ShoppingCartQueryResponseDTO;
+import edu.miu.ShoppingCartQuery.entity.order.Order;
 import edu.miu.ShoppingCartQuery.service.ShoppingCartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,9 +38,10 @@ public class ShoppingCartQueryController {
     @GetMapping("/chackout/{cartNumber}/{customerId}")
     ResponseEntity<?> checkoutShoppingCart(@PathVariable String cartNumber, @PathVariable String customerId) {
 
-        shoppingCartService.getShoppingCartQueryCheckout(cartNumber, customerId);
+         String order = shoppingCartService.getShoppingCartQueryCheckout(cartNumber, customerId);
 
-        return new ResponseEntity<>("your shopping cart is ordered....", HttpStatus.OK);
+
+        return new ResponseEntity<>("your shopping cart is ordered.... \n "+order, HttpStatus.OK);
     }
 
 

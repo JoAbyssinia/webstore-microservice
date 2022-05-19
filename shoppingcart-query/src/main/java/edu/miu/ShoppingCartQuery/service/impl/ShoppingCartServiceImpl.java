@@ -9,6 +9,7 @@ import edu.miu.ShoppingCartQuery.dto.responce.ShoppingCartQueryResponseDTO;
 import edu.miu.ShoppingCartQuery.entity.Product;
 import edu.miu.ShoppingCartQuery.entity.ProductLine;
 import edu.miu.ShoppingCartQuery.entity.ShoppingCartQuery;
+import edu.miu.ShoppingCartQuery.entity.order.Order;
 import edu.miu.ShoppingCartQuery.feignClient.OrderFeignInterface;
 import edu.miu.ShoppingCartQuery.repository.ShoppingCartQueryRepository;
 import edu.miu.ShoppingCartQuery.service.ShoppingCartService;
@@ -204,9 +205,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
             orderRequestDTO.setShoppingCart(shoppingCartRequestDTO);
 
-            orderFeignInterface.checkout(orderRequestDTO);
+             return orderFeignInterface.checkout(orderRequestDTO);
+
 
         }
+
         return null;
     }
 }
