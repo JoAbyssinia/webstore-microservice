@@ -8,7 +8,11 @@ Main Microservices in the project are:
 4. shoppingcart-query
 5. stock-service
 6. order-service
-7. 
+7. Elk stack
+8. kafka 
+9. API gateway
+10. kipkin
+11. docker and docker-compose
 
 #Contributors
 - Yohannes Kassa Yimam
