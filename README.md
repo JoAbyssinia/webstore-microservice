@@ -11,7 +11,7 @@ Main Microservices in the project are:
 7. Elk stack
 8. kafka 
 9. API gateway
-10. kipkin
+10. Zipkin
 11. docker and docker-compose
 
 #Contributors
